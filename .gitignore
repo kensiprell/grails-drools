@@ -1,0 +1,8 @@
+.settings
+*.log
+/target
+/docs
+grails-drools-*.zip
+grails-drools-*.zip.sha1
+plugin.xml
+web-app
