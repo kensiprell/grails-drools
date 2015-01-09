@@ -1,0 +1,49 @@
+package grails.plugin.drools
+
+rule "New Ticket"
+	salience 10
+	when
+		customer : Customer()
+		ticket : Ticket(customer == customer, status == "New")	
+	then
+		System.out.println("Start processing Ticket # " + ticket.getId());		
+end
+
+rule "Bronze Priority"
+	when
+		customer : Customer(subscription == "Bronze")	
+		ticket : Ticket(customer == customer, status == "New")	
+	then
+		System.out.println("Firing rule Bronze Priority for Ticket # " + ticket.getId());
+		ticket.setStatus("Pending");
+		update(ticket);
+end
+  
+rule "Silver Priority"
+	when
+		customer : Customer(subscription == "Silver")	
+		ticket : Ticket(customer == customer, status == "New")	
+	then
+		System.out.println("Firing rule Silver Priority for Ticket # " + ticket.getId());
+		ticket.setStatus("Escalate");
+		update(ticket);	
+end
+
+rule "Gold Priority"
+	when
+		customer : Customer(subscription == "Gold")	
+		ticket : Ticket(customer == customer, status == "New")	
+	then
+		System.out.println("Firing rule Gold Priority for Ticket # " + ticket.getId());
+		ticket.setStatus("Escalate");
+		update(ticket);	
+end
+
+rule "Special Discount"
+	when
+		customer : Customer (subscription == "Gold")	
+		ticket : Ticket(customer == customer, status == "Escalate")	
+	then
+		System.out.println("Firing rule Special Discount for Ticket # " + ticket.getId());
+		customer.setDiscount(5);
+end

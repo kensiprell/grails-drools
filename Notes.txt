@@ -74,3 +74,31 @@ https://github.com/droolsjbpm/drools/blob/master/drools-examples-api/kie-module-
 https://github.com/droolsjbpm/drools/blob/master/drools-examples-api/kiefilesystem-example/src/main/java/org/drools/example/api/kiefilesystem/KieFileSystemExample.java
 https://github.com/droolsjbpm/drools/blob/master/drools-examples-api/named-kiesession-from-file/src/main/java/org/drools/example/api/namedkiesessionfromfile/NamedKieSessionFromFileExample.java
 https://github.com/droolsjbpm/drools/tree/master/drools-examples-cdi/cdi-example
+
+
+The following files were downloaded when drools:0.4.1 was first installed in flexnes on 9 Jan 15:
+|Downloading: com/sun/xml/bind/jaxb-core/2.2.7/jaxb-core-2.2.7.pom
+|Downloading: javax/xml/bind/jaxb-api/2.2.7/jaxb-api-2.2.7.pom
+|Downloading: com/sun/istack/istack-commons-runtime/2.16/istack-commons-runtime-2.16.pom
+|Downloading: com/sun/istack/istack-commons/2.16/istack-commons-2.16.pom
+|Downloading: com/sun/xml/fastinfoset/FastInfoset/1.2.12/FastInfoset-1.2.12.pom
+|Downloading: com/sun/xml/fastinfoset/fastinfoset-project/1.2.12/fastinfoset-project-1.2.12.pom
+|Downloading: javax/xml/bind/jsr173_api/1.0/jsr173_api-1.0.pom
+|Downloading: org/antlr/stringtemplate/3.2.1/stringtemplate-3.2.1.pom
+|Downloading: jsr94/jsr94/1.1/jsr94-1.1.pom
+|Downloading: com/lowagie/itext/2.1.2/itext-2.1.2.pom
+|Downloading: com/sun/xml/bind/jaxb-core/2.2.7/jaxb-core-2.2.7.jar
+|Downloading: javax/xml/bind/jaxb-api/2.2.7/jaxb-api-2.2.7.jar
+|Downloading: com/sun/xml/fastinfoset/FastInfoset/1.2.12/FastInfoset-1.2.12.jar
+|Downloading: javax/xml/bind/jsr173_api/1.0/jsr173_api-1.0.jar
+|Downloading: com/sun/istack/istack-commons-runtime/2.16/istack-commons-runtime-2.16.jar
+|Downloading: xmlpull/xmlpull/1.1.3.1/xmlpull-1.1.3.1.jar
+|Downloading: org/drools/drools-templates/6.1.0.Final/drools-templates-6.1.0.Final.jar
+|Downloading: org/apache/poi/poi-ooxml/3.10-FINAL/poi-ooxml-3.10-FINAL.jar
+|Downloading: org/antlr/stringtemplate/3.2.1/stringtemplate-3.2.1.jar
+|Downloading: org/apache/poi/poi/3.10-FINAL/poi-3.10-FINAL.jar
+|Downloading: org/apache/poi/poi-ooxml-schemas/3.10-FINAL/poi-ooxml-schemas-3.10-FINAL.jar
+|Downloading: org/apache/xmlbeans/xmlbeans/2.3.0/xmlbeans-2.3.0.jar
+|Downloading: stax/stax-api/1.0.1/stax-api-1.0.1.jar
+|Downloading: com/lowagie/itext/2.1.2/itext-2.1.2.jar
+|Downloading: jsr94/jsr94/1.1/jsr94-1.1.jar
