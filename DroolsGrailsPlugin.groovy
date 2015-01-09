@@ -1,6 +1,6 @@
 class DroolsGrailsPlugin {
 
-	String version = '0.4-SNAPSHOT'
+	String version = '0.4.1'
 	String grailsVersion = '2.0 > *'
 	List pluginExcludes = [
 		'docs/**',
