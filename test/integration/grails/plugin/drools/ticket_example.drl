@@ -4,9 +4,9 @@ rule "New Ticket"
 	salience 10
 	when
 		customer : Customer()
-		ticket : Ticket(customer == customer, status == "New")	
+		ticket : Ticket(customer == customer, status == "New")
 	then
-		System.out.println("Start processing Ticket # " + ticket.getId());		
+		System.out.println("Start processing Ticket # " + ticket.getId());
 end
 
 rule "Bronze Priority"
