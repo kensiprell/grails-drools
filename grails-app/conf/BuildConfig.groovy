@@ -55,9 +55,10 @@ grails.project.dependency.resolution = {
 			excludes "FastInfoset", "jaxb-core"
 		}
 
-		runtime "org.codehaus.janino:janino:2.5.16", {    // Tried  2.7.6
+		// TODO find more recent version
+		// java.lang.NoClassDefFoundError: org/codehaus/janino/Scanner$ScanException in 2.7.6 and above
+		runtime "org.codehaus.janino:janino:2.5.16", {
 			excludes "ant-nodeps", "junit"
-			// java.lang.NoClassDefFoundError: org/codehaus/janino/Scanner$ScanException
 		}
 
 		runtime "com.thoughtworks.xstream:xstream:1.4.7", {
@@ -78,7 +79,6 @@ grails.project.dependency.resolution = {
 
 		//		drools-persistence-jpa-6.0.0.CR5
 		//		drools-templates-6.0.0.CR5
-
 		//		bcmail-jdk14-138
 		//		bcprov-jdk14-138
 		//		dom4j-1.6.1

@@ -1,4 +1,7 @@
-package grails.plugin.drools
+package test.with.defaultKieBase
+
+import grails.plugin.drools.Customer
+import grails.plugin.drools.Ticket
 
 rule "New Ticket"
 	salience 10
@@ -11,8 +14,8 @@ end
 
 rule "Bronze Priority"
 	when
-		customer : Customer(subscription == "Bronze")	
-		ticket : Ticket(customer == customer, status == "New")	
+		customer : Customer(subscription == "Bronze")
+		ticket : Ticket(customer == customer, status == "New")
 	then
 		System.out.println("Firing rule Bronze Priority for Ticket # " + ticket.getId());
 		ticket.setStatus("Pending");
@@ -21,8 +24,8 @@ end
   
 rule "Silver Priority"
 	when
-		customer : Customer(subscription == "Silver")	
-		ticket : Ticket(customer == customer, status == "New")	
+		customer : Customer(subscription == "Silver")
+		ticket : Ticket(customer == customer, status == "New")
 	then
 		System.out.println("Firing rule Silver Priority for Ticket # " + ticket.getId());
 		ticket.setStatus("Escalate");
@@ -31,8 +34,8 @@ end
 
 rule "Gold Priority"
 	when
-		customer : Customer(subscription == "Gold")	
-		ticket : Ticket(customer == customer, status == "New")	
+		customer : Customer(subscription == "Gold")
+		ticket : Ticket(customer == customer, status == "New")
 	then
 		System.out.println("Firing rule Gold Priority for Ticket # " + ticket.getId());
 		ticket.setStatus("Escalate");
@@ -41,8 +44,8 @@ end
 
 rule "Special Discount"
 	when
-		customer : Customer (subscription == "Gold")	
-		ticket : Ticket(customer == customer, status == "Escalate")	
+		customer : Customer (subscription == "Gold")
+		ticket : Ticket(customer == customer, status == "Escalate")
 	then
 		System.out.println("Firing rule Special Discount for Ticket # " + ticket.getId());
 		customer.setDiscount(5);

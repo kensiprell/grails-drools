@@ -7,7 +7,7 @@ class DroolsGrailsPlugin {
 	List pluginExcludes = [
 		'docs/**',
 		'src/docs/**',
-		'grails-app/drools'
+		'grails-app/conf/drools-default-context.xml'
 	]
 
 	String title = 'Drools Plugin'
@@ -22,7 +22,13 @@ class DroolsGrailsPlugin {
 	def scm = [url: 'https://github.com/burtbeckwith/grails-drools']
 
 	def doWithSpring = {
+		// TODO if plugin; won't work if file is in templates dir
+		// TODO use try catch and comment for plugin test
 		importBeans("drools-default-context.xml")
+		// TODO if app
+		//importBeans("drools-context.xml")
+
+		// TODO iterate over config.eventListeners
 
 		kiePostProcessor(KModuleBeanFactoryPostProcessor) { bean ->
 		}
