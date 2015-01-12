@@ -11,8 +11,8 @@ eventCompileStart = {
 		def dir = "${basedir}/test/integration/grails/plugin/drools"
 		projectCompiler.srcDirectories << dir
 		ant.copy(todir: buildSettings.resourcesDir,
-				failonerror: false,
-				preservelastmodified: true) {
+			failonerror: false,
+			preservelastmodified: true) {
 			fileset(dir: dir) {
 				include(name: '*.drl')
 			}
@@ -35,8 +35,8 @@ eventCreateWarStart = { warName, stagingDir ->
 
 private copyResources(destination) {
 	ant.copy(todir: destination,
-			failonerror: false,
-			preservelastmodified: true) {
+		failonerror: false,
+		preservelastmodified: true) {
 		fileset(dir: drlFileLocation) {
 			exclude(name: '*.groovy')
 			exclude(name: '*.java')
@@ -88,7 +88,9 @@ private writeDroolsContentXml(basedir, isPluginProject) {
 	}
 	droolsContextXmlFile.write writer.toString()
 	if (isPluginProject) {
+		// TODO decide: file is excluded in descriptor.
 		new File("$droolsPluginDir/grails-app/conf/drools-default-context.xml").write writer.toString()
+		//new File("$droolsPluginDir/test/integration/grails/plugin/drools/drools-default-context.xml").write writer.toString()
 	}
 }
 

@@ -5,7 +5,7 @@
 
 [Drools](https://www.drools.org) is a Business Rules Management System (BRMS) solution.
 
-The plugin has been tested in the following environment using the [grails-drools-sample](https://github.com/kensiprell/grails-drools-sample) application:
+The plugin has been tested in the following environment<!--using the [grails-drools-sample](https://github.com/kensiprell/grails-drools-sample) application-->:
 
 * Drools 6.1.0.Final
 
@@ -13,9 +13,7 @@ The plugin has been tested in the following environment using the [grails-drools
 
 * JDK 1.7.0_71
 
-* Grails versions 2.1.5, 2.2.4, 2.3.9, and 2.4.4
-
-* Tomcat 7.0.27 through 7.0.54 (depends on Grails version)
+* Grails versions 2.0.4, 2.1.5, 2.2.4, 2.3.9, and 2.4.4
 
 If you have a question, problem, suggestion, or want to report a bug, please submit an [issue](https://github.com/kensiprell/grails-drools/issues?state=open). I will reply as soon as I can.
 
@@ -90,7 +88,7 @@ kie-spring provides features to define the listeners as standalone (individual) 
 ### Logging
 TODO
 
-Drools supports adding 2 types of loggers to KieSessions - ConsoleLogger, FileLogger.
+<!--Drools supports adding 2 types of loggers to KieSessions - ConsoleLogger, FileLogger.
 
 The kie-spring module allows you to configure these loggers to KieSessions using XML tags. These tags have identical names as the actual logger interfaces i.e., <kie:consoleLogger....> and <kie:fileLogger....>.
 
@@ -106,12 +104,12 @@ You can change the plugin log level by adding a a line to your application's ```
 
 ```
 debug "org.grails.plugins.drools"
-```
+```-->
 
 ### Batch Commands
 TODO
 
-A <kie:batch> element can be used to define a set of batch commands for a given ksession.This tag has no attributes and must be present directly under a <kie:ksession....> element. The commands supported are
+<!--A <kie:batch> element can be used to define a set of batch commands for a given ksession.This tag has no attributes and must be present directly under a <kie:ksession....> element. The commands supported are
 
 insert-object
 	ref = String (optional)
@@ -133,3 +131,4 @@ signal-event
 	event-type = String (required)
 	process-instance-id =n (optional)
 
+-->
