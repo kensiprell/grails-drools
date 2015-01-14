@@ -1,0 +1,25 @@
+import grails.plugin.drools.Applicant
+import grails.plugin.drools.Application
+
+rule "Applicant is over 18"
+when
+    $a : Applicant(age > 18)
+then
+    System.out.println("Applicant is over 18.");
+end
+
+rule "Application was made this year"
+when
+    $a : Application(dateApplied > "01-Jan-2015")
+then
+    System.out.println("Application was made this year.");
+end
+
+rule "Application is valid"
+when
+    $p : Applicant(age > 18)
+    $a : Application(dateApplied > "01-Jan-2015")
+then
+    System.out.println("Application is valid.");
+    $a.setValid(true);
+end

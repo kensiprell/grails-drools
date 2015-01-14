@@ -4,12 +4,12 @@ import groovy.xml.MarkupBuilder
 configurationType = grailsSettings.config.grails.plugin.drools.configurationType ?: "droolsConfigGroovy"  // "droolsContextXml
 drlFileLocation = grailsSettings.config.grails.plugin.drools.drlFileLocation ?: "src/drools" // user determined
 
-// TODO must run test-app twice in order to get *.drl on classpath
+// TODO must run test-app twice in order to get *.drl on classpath after rm -r target
 
 eventCompileStart = {
 	if (isPluginProject) {
 		def dir = "${basedir}/test/integration/grails/plugin/drools"
-		projectCompiler.srcDirectories << dir
+		//projectCompiler.srcDirectories << dir
 		ant.copy(todir: buildSettings.resourcesDir,
 			failonerror: false,
 			preservelastmodified: true) {
@@ -69,14 +69,17 @@ private writeDroolsContentXml(basedir, isPluginProject) {
 	def droolsContentXml = new MarkupBuilder(writer)
 	droolsContentXml.mkp.xmlDeclaration(version: "1.0", encoding: "utf-8")
 	droolsContentXml.beans(xmlns: "http://www.springframework.org/schema/beans", "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance", "xmlns:kie": "http://drools.org/schema/kie-spring", "xsi:schemaLocation": "http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://drools.org/schema/kie-spring http://drools.org/schema/kie-spring.xsd") {
-		"kie:kmodule"(id: "kieModule") {
-			droolsConfig.kieBases.each { kieBase ->
+		"kie:kmodule"(id: "defaultKieModule") {
+			//droolsConfig.kieBases.each { kieBase ->
+			for (kieBase in droolsConfig.kieBases) {
 				if (!kieBase.includeInConfig) return
 				"kie:kbase"(kieBase.attributes) {
-					kieBase.kieSessions.each { kieSession ->
+					//kieBase.kieSessions.each { kieSession ->
+					for (kieSession in kieBase.kieSessions) {
 						if (!kieSession.includeInConfig) return
 						"kie:ksession"(kieSession.attributes) {
-							kieSession.listeners.each { listener ->
+							//kieSession.listeners.each { listener ->
+							for (listener in kieSession.listeners) {
 								if (!listener.includeInConfig) return
 								"kie:$listener.type"(listener.attributes)
 							}
@@ -85,6 +88,8 @@ private writeDroolsContentXml(basedir, isPluginProject) {
 				}
 			}
 		}
+		// TODO iterate over event listeners
+		bean(id: "kiePostProcessor", class: "org.kie.spring.KModuleBeanFactoryPostProcessor")
 	}
 	droolsContextXmlFile.write writer.toString()
 	if (isPluginProject) {

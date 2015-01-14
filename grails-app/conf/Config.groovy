@@ -1,5 +1,13 @@
+grails {
+	plugin {
+		drools {
+			domainClass = "grails.plugin.drools.DroolsRule"
+		}
+	}
+}
+
 log4j = {
-	warn 'org.drools',
+	error 'org.drools',
 		'org.kie'
 
 	error 'org.codehaus.groovy.grails',

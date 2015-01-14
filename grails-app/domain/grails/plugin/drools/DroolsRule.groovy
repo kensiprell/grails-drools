@@ -4,6 +4,7 @@ class DroolsRule {
 
 	String value
 	String description
+	String packageName
 
 	static mapping = {
 		value type: 'text'
@@ -12,5 +13,6 @@ class DroolsRule {
 	static constraints = {
 		value blank: false
 		description blank: false
+		packageName blank: true
 	}
 }

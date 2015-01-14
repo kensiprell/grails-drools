@@ -1,5 +1,3 @@
-package test.with.defaultKieBase
-
 import grails.plugin.drools.Customer
 import grails.plugin.drools.Ticket
 

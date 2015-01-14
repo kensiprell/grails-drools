@@ -6,7 +6,7 @@ kieBases = [
 		// TODO Comment
 		attributes     : [
 			name    : "defaultKieBase", // Required
-			default : false, // TODO Comment
+			default : true, // TODO Comment
 			packages: "test.with.defaultKieBase", // Comma separated list of resource packages to be included in this kbase.
 			//includes           : "", // All resources from the corresponding kbases are included in this kbase.
 			//scope              : "", // TODO Comment
@@ -48,7 +48,7 @@ kieBases = [
 				// TODO Comment
 				attributes     : [
 					name   : "defaultKieStatelessSession", // Required
-					default: false, // TODO Comment
+					default: true, // TODO Comment
 					type   : "stateless", // Valid options are stateful, stateless.
 					//scope          : "", // TODO Comment
 					//clockType      : "", // Valid options are REALTIME, PSEUDO.

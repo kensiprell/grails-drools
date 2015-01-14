@@ -23,15 +23,10 @@ class DroolsGrailsPlugin {
 
 	def doWithSpring = {
 		// TODO if plugin; won't work if file is in templates dir
-		// TODO use try catch and comment for plugin test
+		// TODO use try catch and comment for plugin test?
 		importBeans("drools-default-context.xml")
 		// TODO if app
 		//importBeans("drools-context.xml")
-
-		// TODO iterate over config.eventListeners
-
-		kiePostProcessor(KModuleBeanFactoryPostProcessor) { bean ->
-		}
 	}
 }
 
