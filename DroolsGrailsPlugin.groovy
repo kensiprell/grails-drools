@@ -22,6 +22,11 @@ class DroolsGrailsPlugin {
 	def issueManagement = [system: 'JIRA', url: 'https://github.com/burtbeckwith/grails-drools/issues']
 	def scm = [url: 'https://github.com/burtbeckwith/grails-drools']
 
+	// TODO scripts
+	//create-drools-config
+	//create-drools-domain
+	//create-drools-context
+
 	def doWithSpring = {
 		importBeans("drools-context.xml")
 	}

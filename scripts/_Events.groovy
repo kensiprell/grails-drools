@@ -1,8 +1,8 @@
 import grails.util.Environment
 import groovy.xml.MarkupBuilder
 
-configurationType = grailsSettings.config.grails.plugin.drools.configurationType
-drlFileLocation = grailsSettings.config.grails.plugin.drools.drlFileLocation
+configurationType = grailsSettings.config.grails.plugin.drools.configurationType ?: "droolsConfigGroovy"
+drlFileLocation = grailsSettings.config.grails.plugin.drools.drlFileLocation ?: "src/rules"
 
 eventCompileStart = {
 	if (isPluginProject) {
