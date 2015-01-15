@@ -4,7 +4,7 @@
 
 [Drools](https://www.drools.org) is a Business Rules Management System (BRMS) solution. The plugin fully supports [Drools kie-spring integration](http://docs.jboss.org/drools/release/6.1.0.Final/drools-docs/html/ch.kie.spring.html).
 
-The plugin has been tested in the following environment<!--using the [grails-drools-sample](https://github.com/kensiprell/grails-drools-sample) application-->:
+The plugin has been tested in the following environment:
 
 * Drools 6.2.0.CR4
 
@@ -32,7 +32,9 @@ class SomeService {
 		def fact1 = SomeDomain.get(123)
 		def fact2 = SomeOtherDomain.get(123)
 		Object [] facts = [fact1, fact2]
-		packageOneStatelessSession.execute(Arrays.asList(facts))	}```
+		packageOneStatelessSession.execute(Arrays.asList(facts))
+	}
+```
 
 ### Database and File Rules
 The [DroolsService](https://github.com/kensiprell/grails-drools/blob/master/grails-app/services/grails/plugin/drools/DroolsService.groovy) offers several methods to use rules stored in a database or on the file system (classpath). For example, assuming you have several rules in the database with a ```packageName``` of "ticket", you could do something like this:
@@ -44,7 +46,9 @@ class SomeOtherService {
 	def someMethod() {
 		def fact1 = SomeDomain.get(123)
 		def fact2 = SomeOtherDomain.get(123)
-		droolsService.fireFromDatabase("ticket", [fact1, fact2])	}```
+		droolsService.fireFromDatabase("ticket", [fact1, fact2])
+	}
+```
 
 ## Plugin Installation, Configuration, and Use
 
