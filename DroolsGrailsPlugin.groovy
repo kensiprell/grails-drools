@@ -24,8 +24,8 @@ class DroolsGrailsPlugin {
 
 	// TODO scripts
 	//create-drools-config
-	//create-drools-domain
 	//create-drools-context
+	//create-drools-domain
 
 	def doWithSpring = {
 		importBeans("drools-context.xml")

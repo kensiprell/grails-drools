@@ -9,6 +9,7 @@ eventCompileStart = {
 		ant.copy(todir: "${grailsSettings.testClassesDir}/integration", failonerror: false, flatten: true) {
 			fileset(dir: "${basedir}/src/rules") {
 				include(name: "**/*.drl")
+				include(name:"**/*.rule")
 			}
 		}
 	} else {

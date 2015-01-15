@@ -5,6 +5,10 @@
       <kie:ksession name='applicationStatefulSession' default='false' type='stateful' />
       <kie:ksession name='applicationStatelessSession' default='false' type='stateless' />
     </kie:kbase>
+    <kie:kbase name='ticketKieBase' default='false' packages='rules.ticket'>
+      <kie:ksession name='ticketStatefulSession' default='false' type='stateful' />
+      <kie:ksession name='ticketStatelessSession' default='false' type='stateless' />
+    </kie:kbase>
   </kie:kmodule>
   <bean id='kiePostProcessor' class='org.kie.spring.KModuleBeanFactoryPostProcessor' />
 </beans>
