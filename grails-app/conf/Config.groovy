@@ -1,3 +1,4 @@
+// Plugin Runtime Defaults
 grails {
 	plugin {
 		drools {
@@ -7,7 +8,7 @@ grails {
 }
 
 log4j = {
-	error 'org.drools',
+	warn 'org.drools',
 		'org.kie'
 
 	error 'org.codehaus.groovy.grails',

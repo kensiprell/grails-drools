@@ -2,6 +2,16 @@ grails.project.work.dir = "target"
 grails.project.docs.output.dir = "docs/manual" // for backwards-compatibility, the docs are checked into gh-pages branch
 grails.project.dependency.resolver = "maven"
 
+// Plugin Build Defaults
+grails {
+	plugin {
+		drools {
+			configurationType = "droolsConfigGroovy" // droolsConfigGroovy or droolsContextXml
+			drlFileLocation = "src/rules"            // User defined
+		}
+	}
+}
+
 grails.project.dependency.resolution = {
 	inherits "global"
 	log "warn"

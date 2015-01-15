@@ -1,7 +1,5 @@
 package grails.plugin.drools
 
-import org.kie.api.KieBase
-import org.kie.api.builder.model.KieModuleModel
 import org.kie.api.runtime.KieSession
 import org.kie.api.runtime.StatelessKieSession
 import spock.lang.Specification
@@ -9,22 +7,35 @@ import spock.lang.Specification
 class RulesTests extends Specification {
 
 	def droolsService
-	KieModuleModel defaultKieModule
-	KieBase defaultKieBase
-	KieSession defaultKieStatefulSession  // StatefulKnowledgeSessionImpl
-	StatelessKieSession defaultKieStatelessSession    // StatelessKnowledgeSessionImpl
-	def kiePostProcessor
+	StatelessKieSession applicationStatelessSession
+	// TODO tests for ticketStatefulSession
+	KieSession ticketStatefulSession
 
-/*
-	void "test drools-default-context.xml beans"() {
-		given:
-		println defaultKieModule.getKieBaseModels()  //.toXML() //.kieBaseModels.size() //!= null
-		println defaultKieBase.kiePackages //.kieSessions.size() //!= null
-		println defaultKieStatefulSession //!= null
-		println defaultKieStatelessSession //!= null
-		kiePostProcessor != null
+	void "test applicationStatelessSession bean"() {
+		when: "age is over 18 and application is made this year"
+		def applicant = new Applicant(name: "A Smith", age: 20)
+		def application = new Application(dateApplied: new Date())
+		Object [] facts = [applicant, application]
+		applicationStatelessSession.execute(Arrays.asList(facts))
+		then:
+		application.valid
+
+		when: "age is 17 and application is made this year"
+		applicant = new Applicant(name: "B Smith", age: 17)
+		application = new Application(dateApplied: new Date())
+		facts = [applicant, application]
+		applicationStatelessSession.execute(Arrays.asList(facts))
+		then:
+		!application.valid
+
+		when: "age is over 18 and application is made last year"
+		applicant = new Applicant(name: "C Smith", age: 20)
+		application = new Application(dateApplied: new Date(114, 0, 1))
+		facts = [applicant, application]
+		applicationStatelessSession.execute(Arrays.asList(facts))
+		then:
+		!application.valid
 	}
-*/
 
 	void "test executeFromFile"() {
 		when: "age is over 18 and application is made this year"
@@ -51,7 +62,7 @@ class RulesTests extends Specification {
 
 	void "test executeFromDatabase with rule id"() {
 		given:
-		String drlText = getClass().getResourceAsStream("application.drl").text
+		String drlText = new GroovyClassLoader().getResourceAsStream("application.drl").text
 		def rule = new DroolsRule(value: drlText, description: "ticket.drl", packageName: "application").save(flush: true)
 		DroolsRule.withSession { it.clear() }
 
@@ -79,10 +90,11 @@ class RulesTests extends Specification {
 
 	void "test executeFromDatabase with packageName"() {
 		given:
-		String drlText = getClass().getResourceAsStream("db_application.drl").text
-		new DroolsRule(value: drlText, description: "db_application.drl", packageName: "application").save(flush: true)
-		drlText = getClass().getResourceAsStream("db_ticket.drl").text
-		new DroolsRule(value: drlText, description: "db_ticket.drl", packageName: "application").save(flush: true)
+		def classLoader = new GroovyClassLoader()
+		String drlText = classLoader.getResourceAsStream("application.drl").text
+		new DroolsRule(value: drlText, description: "application.drl", packageName: "application").save(flush: true)
+		drlText = classLoader.getResourceAsStream("ticket.drl").text
+		new DroolsRule(value: drlText, description: "ticket.drl", packageName: "application").save(flush: true)
 		DroolsRule.withSession { it.clear() }
 
 		when: "age is over 18 and application is made this year"
@@ -127,12 +139,13 @@ class RulesTests extends Specification {
 
 	void "test fireFromDatabase with rule id"() {
 		given:
+		def classLoader = new GroovyClassLoader()
 		def t1 = new Ticket(1, new Customer("Jack", "Gold"))
 		def t2 = new Ticket(2, new Customer("Tom", "Silver"))
 		def t3 = new Ticket(3, new Customer("Bill", "Bronze"))
 
 		when:
-		String drlText = getClass().getResourceAsStream("ticket.drl").text
+		String drlText = classLoader.getResourceAsStream("ticket.drl").text
 		def rule = new DroolsRule(value: drlText, description: "ticket.drl", packageName: "ticket").save(flush: true)
 		DroolsRule.withSession { it.clear() }
 		droolsService.fireFromDatabase(rule.id, [t1, t1.customer, t2, t2.customer, t3, t3.customer])
@@ -148,15 +161,16 @@ class RulesTests extends Specification {
 
 	void "test fireFromDatabase with packageName"() {
 		given:
+		def classLoader = new GroovyClassLoader()
 		def t1 = new Ticket(1, new Customer("Jack", "Gold"))
 		def t2 = new Ticket(2, new Customer("Tom", "Silver"))
 		def t3 = new Ticket(3, new Customer("Bill", "Bronze"))
 
 		when:
-		String drlText = getClass().getResourceAsStream("db_ticket.drl").text
-		new DroolsRule(value: drlText, description: "db_ticket.drl", packageName: "ticket").save(flush: true)
-		drlText = getClass().getResourceAsStream("db_application.drl").text
-		new DroolsRule(value: drlText, description: "db_application.drl", packageName: "ticket").save(flush: true)
+		String drlText = classLoader.getResourceAsStream("ticket.drl").text
+		new DroolsRule(value: drlText, description: "ticket.drl", packageName: "ticket").save(flush: true)
+		drlText = classLoader.getResourceAsStream("application.drl").text
+		new DroolsRule(value: drlText, description: "application.drl", packageName: "ticket").save(flush: true)
 		DroolsRule.withSession { it.clear() }
 		droolsService.fireFromDatabase("ticket", [t1, t1.customer, t2, t2.customer, t3, t3.customer])
 

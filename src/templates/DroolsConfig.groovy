@@ -7,7 +7,7 @@ kieBases = [
 		attributes     : [
 			name    : "defaultKieBase", // Required
 			default : true, // TODO Comment
-			packages: "test.with.defaultKieBase", // Comma separated list of resource packages to be included in this kbase.
+			packages: "defaultKieBase", // Comma separated list of resource packages to be included in this kbase.
 			//includes           : "", // All resources from the corresponding kbases are included in this kbase.
 			//scope              : "", // TODO Comment
 			//eventProcessingMode: "", // Valid options are STREAM, CLOUD.

@@ -13,6 +13,7 @@ import org.kie.api.runtime.StatelessKieSession
 import org.springframework.util.Assert
 
 class DroolsService {
+	// TODO log.debug
 
 	static transactional = false
 	def grailsApplication
@@ -95,11 +96,9 @@ class DroolsService {
 		KieBuilder kieBuilder = kieServices.newKieBuilder(kfs).buildAll()
 		Results results = kieBuilder.results
 		if (results.hasMessages(Message.Level.ERROR)) {
-			//println results.messages
 			throw new IllegalStateException(results.messages.toString())
 		}
 		KieContainer kieContainer = kieServices.newKieContainer(kieServices.repository.defaultReleaseId)
 		kieContainer.kieBase
 	}
-
 }

@@ -1,24 +1,18 @@
 import grails.util.Environment
 import groovy.xml.MarkupBuilder
 
-configurationType = grailsSettings.config.grails.plugin.drools.configurationType ?: "droolsConfigGroovy"  // "droolsContextXml
-drlFileLocation = grailsSettings.config.grails.plugin.drools.drlFileLocation ?: "src/drools" // user determined
-
-// TODO must run test-app twice in order to get *.drl on classpath after rm -r target
+configurationType = grailsSettings.config.grails.plugin.drools.configurationType
+drlFileLocation = grailsSettings.config.grails.plugin.drools.drlFileLocation
 
 eventCompileStart = {
 	if (isPluginProject) {
-		def dir = "${basedir}/test/integration/grails/plugin/drools"
-		//projectCompiler.srcDirectories << dir
-		ant.copy(todir: buildSettings.resourcesDir,
-			failonerror: false,
-			preservelastmodified: true) {
-			fileset(dir: dir) {
-				include(name: '*.drl')
+		ant.copy(todir: "${grailsSettings.testClassesDir}/integration", failonerror: false, flatten: true) {
+			fileset(dir: "${basedir}/src/rules") {
+				include(name: "**/*.drl")
 			}
 		}
 	} else {
-		projectCompiler.srcDirectories << drlFileLocation
+		projectCompiler.srcDirectories << "${basedir}/${drlFileLocation}"
 		copyResources buildSettings.resourcesDir
 	}
 }
@@ -46,14 +40,12 @@ private copyResources(destination) {
 
 private writeDroolsContentXml(basedir, isPluginProject) {
 	def droolsConfigFile
-	def droolsContextXmlFile
+	def droolsContextXmlFile = new File("${basedir}/grails-app/conf/drools-context.xml")
 	def slurper = new ConfigSlurper(Environment.current.name)
 	if (isPluginProject) {
-		droolsConfigFile = new File("${droolsPluginDir}/grails-app/conf/DroolsDefaultConfig.groovy").toURI().toURL()
-		droolsContextXmlFile = new File("$droolsPluginDir/src/templates/drools-default-context.xml")
+		droolsConfigFile = new File("${droolsPluginDir}/grails-app/conf/DroolsTestConfig.groovy").toURI().toURL()
 	} else {
 		droolsConfigFile = new File("${basedir}/grails-app/conf/DroolsConfig.groovy").toURI().toURL()
-		droolsContextXmlFile = new File("${basedir}/grails-app/conf/drools-context.xml")
 	}
 	try {
 		droolsConfig = slurper.parse(droolsConfigFile)
@@ -70,16 +62,13 @@ private writeDroolsContentXml(basedir, isPluginProject) {
 	droolsContentXml.mkp.xmlDeclaration(version: "1.0", encoding: "utf-8")
 	droolsContentXml.beans(xmlns: "http://www.springframework.org/schema/beans", "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance", "xmlns:kie": "http://drools.org/schema/kie-spring", "xsi:schemaLocation": "http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://drools.org/schema/kie-spring http://drools.org/schema/kie-spring.xsd") {
 		"kie:kmodule"(id: "defaultKieModule") {
-			//droolsConfig.kieBases.each { kieBase ->
-			for (kieBase in droolsConfig.kieBases) {
+			droolsConfig.kieBases.each { kieBase ->
 				if (!kieBase.includeInConfig) return
 				"kie:kbase"(kieBase.attributes) {
-					//kieBase.kieSessions.each { kieSession ->
-					for (kieSession in kieBase.kieSessions) {
+					kieBase.kieSessions.each { kieSession ->
 						if (!kieSession.includeInConfig) return
 						"kie:ksession"(kieSession.attributes) {
-							//kieSession.listeners.each { listener ->
-							for (listener in kieSession.listeners) {
+							kieSession.listeners.each { listener ->
 								if (!listener.includeInConfig) return
 								"kie:$listener.type"(listener.attributes)
 							}
@@ -92,11 +81,6 @@ private writeDroolsContentXml(basedir, isPluginProject) {
 		bean(id: "kiePostProcessor", class: "org.kie.spring.KModuleBeanFactoryPostProcessor")
 	}
 	droolsContextXmlFile.write writer.toString()
-	if (isPluginProject) {
-		// TODO decide: file is excluded in descriptor.
-		new File("$droolsPluginDir/grails-app/conf/drools-default-context.xml").write writer.toString()
-		//new File("$droolsPluginDir/test/integration/grails/plugin/drools/drools-default-context.xml").write writer.toString()
-	}
 }
 
 /*
