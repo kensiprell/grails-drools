@@ -1,4 +1,4 @@
-println "\nInstalled drools plugin\n"
+//println "\nInstalled drools plugin\n"
 
 // TODO if (!DroolsConfig.groovy) { copy default }
 

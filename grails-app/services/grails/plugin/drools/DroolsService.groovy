@@ -14,16 +14,17 @@ import org.springframework.util.Assert
 
 class DroolsService {
 	// TODO log.debug
+	// TODO null checking
 
 	static transactional = false
 	def grailsApplication
 
 	def executeFromDatabase(Long id, List facts) {
-		def droolsRule = DroolsRule.get(id)
+		String droolsRule = getDatabaseRule(id)
 		Assert.notNull droolsRule, "DroolsRule not found for key $id"
 
 		KieServices kieServices = KieServices.Factory.get()
-		Resource resource = kieServices.resources.newByteArrayResource(droolsRule.value.bytes)
+		Resource resource = kieServices.resources.newByteArrayResource(droolsRule.bytes)
 		execute(resource, facts)
 	}
 
@@ -41,11 +42,11 @@ class DroolsService {
 	}
 
 	def fireFromDatabase(Long id, List facts) {
-		def droolsRule = DroolsRule.get(id)
+		String droolsRule = getDatabaseRule(id)
 		Assert.notNull droolsRule, "DroolsRule not found for key $id"
 
 		KieServices kieServices = KieServices.Factory.get()
-		Resource resource = kieServices.resources.newByteArrayResource(droolsRule.value.bytes)
+		Resource resource = kieServices.resources.newByteArrayResource(droolsRule.bytes)
 		fire(resource, facts)
 	}
 
@@ -60,6 +61,12 @@ class DroolsService {
 		KieServices kieServices = KieServices.Factory.get()
 		Resource resource = kieServices.resources.newClassPathResource(file)
 		fire(resource, facts)
+	}
+
+	protected getDatabaseRule(Long id) {
+		String className = grailsApplication.config.grails.plugin.drools.domainClass
+		Class clazz = grailsApplication.getDomainClass(className).clazz
+		clazz.get(id).value
 	}
 
 	protected getDatabaseRules(String packageName) {

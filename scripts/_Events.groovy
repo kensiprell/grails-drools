@@ -1,41 +1,49 @@
+import static groovy.io.FileType.FILES
 import grails.util.Environment
 import groovy.xml.MarkupBuilder
 
 configurationType = grailsSettings.config.grails.plugin.drools.configurationType ?: "droolsConfigGroovy"
 drlFileLocation = grailsSettings.config.grails.plugin.drools.drlFileLocation ?: "src/rules"
+sourceDir = new File("${basedir}/${drlFileLocation}")
 
-eventCompileStart = {
-	if (isPluginProject) {
-		ant.copy(todir: "${grailsSettings.testClassesDir}/integration", failonerror: false, flatten: true) {
-			fileset(dir: "${basedir}/src/rules") {
-				include(name: "**/*.drl")
-				include(name:"**/*.rule")
-			}
-		}
-	} else {
-		projectCompiler.srcDirectories << "${basedir}/${drlFileLocation}"
-		copyResources buildSettings.resourcesDir
-	}
-}
+//eventCompileStart = {
+//	if (isPluginProject) {
+//		ant.copy(todir: "${grailsSettings.testClassesDir}/integration", failonerror: false, flatten: true) {
+//			fileset(dir: "${basedir}/src/rules") {
+//				include(name: "**/*.drl")
+//				include(name:"**/*.rule")
+//			}
+//		}
+//	}
+//}
 
 eventCompileEnd = {
 	if (configurationType == "droolsConfigGroovy") {
 		writeDroolsContentXml(basedir, isPluginProject)
 	}
-}
-
-eventCreateWarStart = { warName, stagingDir ->
-	copyResources "$stagingDir/WEB-INF/classes"
-}
-
-private copyResources(destination) {
-	ant.copy(todir: destination,
-		failonerror: false,
-		preservelastmodified: true) {
-		fileset(dir: drlFileLocation) {
-			exclude(name: '*.groovy')
-			exclude(name: '*.java')
+	copyFiles(buildSettings.classesDir)
+	if (Environment.current == Environment.TEST) {
+		sourceDir.traverse(type: FILES) {
+			def newName = "rules$it.path" - "$basedir/$drlFileLocation"
+			newName = newName.replaceAll("/", ".")
+			//newFile = new File("${grailsSettings.testClassesDir}/integration/$newName")
+			newFile = new File("${grailsSettings.testClassesDir}/$newName")
+			newFile.write("$it.text")
 		}
+	}
+}
+
+// TODO Test
+eventCreateWarEnd = { warName, stagingDir ->
+copyFiles("$stagingDir/WEB-INF/classes")
+}
+
+private copyFiles(destination) {
+	sourceDir.traverse(type: FILES) {
+		def newName = "rules$it.path" - "$basedir/$drlFileLocation"
+		newName = newName.replaceAll("/", ".")
+		newFile = new File("${destination}/$newName")
+		newFile.write("$it.text")
 	}
 }
 

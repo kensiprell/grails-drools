@@ -1,11 +1,4 @@
-// Plugin Runtime Defaults
-grails {
-	plugin {
-		drools {
-			domainClass = "grails.plugin.drools.DroolsRule"
-		}
-	}
-}
+grails.plugin.drools.domainClass = "grails.plugin.drools.DroolsRule"
 
 log4j = {
 	warn 'org.drools',

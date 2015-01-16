@@ -1,31 +1,29 @@
 class DroolsGrailsPlugin {
 
-	String version = '0.4.1'
-	String grailsVersion = '2.0 > *'
-	List pluginExcludes = [
-		'docs/**',
-		'src/docs/**',
-		'grails-app/conf/drools-context.xml',
-		'grails-app/conf/DroolsTestConfig.groovy',
-		'grails-app/domain',
-		'src/rules/**'
+	def version = "0.4.1"
+	def grailsVersion = "2.0 > *"
+	def pluginExcludes = [
+		"grails-app/conf/drools-context.xml",
+		"grails-app/conf/DroolsTestConfig.groovy",
+		"grails-app/domain/**",
+		"src/rules/**"
 	]
-
-	String title = 'Drools Plugin'
-	String description = 'Integrates Drools'
-	String documentation = 'http://grails.org/plugin/drools'
-
-	String license = 'APACHE'
+	def title = "Drools Plugin"
+	def author = "Ken Siprell"
+	def authorEmail = "ken.siprell@gmail.com"
 	def developers = [
-		[name: 'Burt Beckwith', email: 'burt@burtbeckwith.com']
+		[name: "Burt Beckwith", email: "burt@burtbeckwith.com"]
 	]
-	def issueManagement = [system: 'JIRA', url: 'https://github.com/burtbeckwith/grails-drools/issues']
-	def scm = [url: 'https://github.com/burtbeckwith/grails-drools']
+	def description = "This plugin integrates the [Drools|https://www.drools.org] Business Rules Management System."
+	def documentation = "https://github.com/kensiprell/grails-drools/blob/master/README.md"
+	def license = "APACHE"
+	def issueManagement = [system: "github", url: "https://github.com/kensiprell/grails-drools/issues"]
+	def scm = [url: "https://github.com/kensiprell/grails-drools"]
 
 	// TODO scripts
 	//create-drools-config
 	//create-drools-context
-	//create-drools-domain
+	//create-drools-domain add grails.plugin.drools.domainClass = "grails.plugin.drools_sample.DroolsRule" to Config.groovy
 
 	def doWithSpring = {
 		importBeans("drools-context.xml")
