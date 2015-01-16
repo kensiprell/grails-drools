@@ -20,11 +20,6 @@ class DroolsGrailsPlugin {
 	def issueManagement = [system: "github", url: "https://github.com/kensiprell/grails-drools/issues"]
 	def scm = [url: "https://github.com/kensiprell/grails-drools"]
 
-	// TODO scripts
-	//create-drools-config
-	//create-drools-context
-	//create-drools-domain add grails.plugin.drools.domainClass = "grails.plugin.drools_sample.DroolsRule" to Config.groovy
-
 	def doWithSpring = {
 		importBeans("drools-context.xml")
 	}

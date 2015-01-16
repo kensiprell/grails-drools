@@ -6,36 +6,20 @@ configurationType = grailsSettings.config.grails.plugin.drools.configurationType
 drlFileLocation = grailsSettings.config.grails.plugin.drools.drlFileLocation ?: "src/rules"
 sourceDir = new File("${basedir}/${drlFileLocation}")
 
-//eventCompileStart = {
-//	if (isPluginProject) {
-//		ant.copy(todir: "${grailsSettings.testClassesDir}/integration", failonerror: false, flatten: true) {
-//			fileset(dir: "${basedir}/src/rules") {
-//				include(name: "**/*.drl")
-//				include(name:"**/*.rule")
-//			}
-//		}
-//	}
-//}
-
 eventCompileEnd = {
 	if (configurationType == "droolsConfigGroovy") {
 		writeDroolsContentXml(basedir, isPluginProject)
 	}
 	copyFiles(buildSettings.classesDir)
-	if (Environment.current == Environment.TEST) {
-		sourceDir.traverse(type: FILES) {
-			def newName = "rules$it.path" - "$basedir/$drlFileLocation"
-			newName = newName.replaceAll("/", ".")
-			//newFile = new File("${grailsSettings.testClassesDir}/integration/$newName")
-			newFile = new File("${grailsSettings.testClassesDir}/$newName")
-			newFile.write("$it.text")
-		}
-	}
+}
+
+eventTestCompileEnd = {
+	copyFiles("${grailsSettings.testClassesDir}/integration")
 }
 
 // TODO Test
 eventCreateWarEnd = { warName, stagingDir ->
-copyFiles("$stagingDir/WEB-INF/classes")
+	copyFiles("$stagingDir/WEB-INF/classes")
 }
 
 private copyFiles(destination) {

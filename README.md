@@ -2,9 +2,9 @@
 
 ## Grails plugin for integrating Drools
 
-[Drools](https://www.drools.org) is a Business Rules Management System (BRMS) solution. The plugin fully supports [Drools kie-spring integration](http://docs.jboss.org/drools/release/6.1.0.Final/drools-docs/html/ch.kie.spring.html).
+[Drools](https://www.drools.org) is a Business Rules Management System (BRMS) solution. The plugin fully supports Drools [kie-spring](http://docs.jboss.org/drools/release/6.1.0.Final/drools-docs/html/ch.kie.spring.html) integration.
 
-The plugin has been tested in the following environment:
+The plugin has been tested  using the [sample application](https://github.com/kensiprell/grails-drools-sample) in the following environment:
 
 * Drools 6.2.0.CR4
 
@@ -12,14 +12,14 @@ The plugin has been tested in the following environment:
 
 * JDK 1.7.0_71
 
-<!--* Grails versions 2.0.4, 2.1.5, 2.2.4, 2.3.9, and 2.4.4-->
+* Grails versions 2.0.4, 2.1.5, 2.2.4, 2.3.9, and 2.4.4
 
 If you have a question, problem, suggestion, or want to report a bug, please submit an [issue](https://github.com/kensiprell/grails-drools/issues?state=open). I will reply as soon as I can.
 
 [Release Notes](https://github.com/kensiprell/grails-drools/wiki/Release-Notes)
 
 ## How the Plugin Works
-The plugin offers a variety of ways to use rules. The [RuleTests](https://github.com/kensiprell/grails-drools/blob/master/test/integration/grails/plugin/drools/RulesTests.groovy) class shows several examples.
+The plugin offers a variety of ways to use rules. The [RuleTests](https://github.com/kensiprell/grails-drools/blob/master/test/integration/grails/plugin/drools/RulesTests.groovy) and [TestController](https://github.com/kensiprell/grails-drools-sample/blob/master/grails-app/controllers/grails/plugin/drools_sample/TestController.groovy) classes show several examples.
 
 ### Beans
 You can define beans using either a configuration file ```grails-app/conf/DroolsConfig.groovy``` or an xml file ```grails-app/conf/drools-context.xml```. This will allow you to do something like this:
@@ -84,7 +84,7 @@ grails.plugin.drools.configurationType = "droolsContextXml"
 
 
 #### grails.plugin.drools.drlFileLocation
-This option is the directory root for Rule files, those files with a "drl" or "rule" suffix. Note the lack of leading and trailing slashes below:
+This option is the directory root for Rule files, generally those files with a "drl" or "rule" suffix. Note the lack of leading and trailing slashes below:
 
 ```
 grails.plugin.drools.drlFileLocation = "path/to/my/rules"
@@ -95,21 +95,37 @@ You can take advantage of rule packages by creating subdirectories under ```drlF
 All files in this directory and its subdirectories with a "drl" or "rule" suffix will be copied to the classpath.
 
 #### DroolsConfig.groovy
-Setting the ```includeInConfig = false``` property will prevent that item from being included in ```grails-app/conf/drools-context.xml```. This will allow you to exclude it without having to delete or comment out its entire section. All other items are described in [Drools Spring Integration](http://docs.jboss.org/drools/release/6.1.0.Final/drools-docs/html/ch.kie.spring.html).
+Setting the ```includeInConfig = false``` property will prevent that item from being included in ```grails-app/conf/drools-context.xml```. This will allow you to exclude it without having to delete or comment out its entire section. All other attributes are described in [Drools Spring Integration](http://docs.jboss.org/drools/release/6.1.0.Final/drools-docs/html/ch.kie.spring.html).
 
 
+### Drools Rule Files
 
-Note that changing the ```grails.plugin.drools.drlFileLocation``` option could affect the ```packages``` property for a ```KieBase```. For example, for the option
+Changes to rule files will not be available until the applicaiton is restarted.
 
-```
-grails.plugin.drools.drlFileLocation = "path/to/myRules"
-```
-
-the property would be:
+Changing the ```grails.plugin.drools.drlFileLocation``` option could affect the ```packages``` property for a ```KieBase```. For example, for the option
 
 ```
-packages: "myRules.package1"
+grails.plugin.drools.drlFileLocation = "path/to/my/rulesDir"
 ```
+
+with a rule file located in a subdirectory:
+
+```
+~/my-grails-app/path/to/my/rulesDir/packageOne/ruleFile1.drl
+```
+
+The rule file will be avaiable on the classpath as
+
+```
+rules.packageOne.ruleFile1.drl
+```
+
+and the KieBase packages property would be:
+
+```
+packages: "rules.packageOne"
+```
+
 
 
 ### Scripts

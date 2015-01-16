@@ -10,67 +10,101 @@ import org.kie.api.builder.Results
 import org.kie.api.runtime.KieContainer
 import org.kie.api.runtime.KieSession
 import org.kie.api.runtime.StatelessKieSession
-import org.springframework.util.Assert
 
 class DroolsService {
-	// TODO log.debug
-	// TODO null checking
+	// TODO log.error strings
 
 	static transactional = false
 	def grailsApplication
 
 	def executeFromDatabase(Long id, List facts) {
-		String droolsRule = getDatabaseRule(id)
-		Assert.notNull droolsRule, "DroolsRule not found for key $id"
-
-		KieServices kieServices = KieServices.Factory.get()
-		Resource resource = kieServices.resources.newByteArrayResource(droolsRule.bytes)
-		execute(resource, facts)
+		String rule = getDatabaseRule(id)
+		if (rule) {
+			KieServices kieServices = KieServices.Factory.get()
+			Resource resource = kieServices.resources.newByteArrayResource(rule.bytes)
+			if (resource) {
+				execute(resource, facts)
+			} else {
+				log.error("Kie Resource is null")
+			}
+		}
 	}
 
 	def executeFromDatabase(String packageName, List facts) {
 		def rules = getDatabaseRules(packageName)
-		KieServices kieServices = KieServices.Factory.get()
-		Resource resource = kieServices.resources.newByteArrayResource(rules)
-		fire(resource, facts)
+		if (rules) {
+			KieServices kieServices = KieServices.Factory.get()
+			Resource resource = kieServices.resources.newByteArrayResource(rules)
+			if (resource){
+				fire(resource, facts)
+			} else {
+				log.error("Kie Resource is null")
+			}
+		}
 	}
 
 	def executeFromFile(String file, List facts) {
 		KieServices kieServices = KieServices.Factory.get()
 		Resource resource = kieServices.resources.newClassPathResource(file)
-		execute(resource, facts)
+		if (resource) {
+			execute(resource, facts)
+		} else {
+			log.error("Kie Resource is null")
+		}
 	}
 
 	def fireFromDatabase(Long id, List facts) {
-		String droolsRule = getDatabaseRule(id)
-		Assert.notNull droolsRule, "DroolsRule not found for key $id"
-
-		KieServices kieServices = KieServices.Factory.get()
-		Resource resource = kieServices.resources.newByteArrayResource(droolsRule.bytes)
-		fire(resource, facts)
+		String rule = getDatabaseRule(id)
+		if (rule) {
+			KieServices kieServices = KieServices.Factory.get()
+			Resource resource = kieServices.resources.newByteArrayResource(rule.bytes)
+			if (resource) {
+				fire(resource, facts)
+			} else {
+				log.error("Kie Resource is null")
+			}
+		}
 	}
 
 	def fireFromDatabase(String packageName, List facts) {
 		def rules = getDatabaseRules(packageName)
-		KieServices kieServices = KieServices.Factory.get()
-		Resource resource = kieServices.resources.newByteArrayResource(rules)
-		fire(resource, facts)
+		if (rules) {
+			KieServices kieServices = KieServices.Factory.get()
+			Resource resource = kieServices.resources.newByteArrayResource(rules)
+			if (resource) {
+				fire(resource, facts)
+			} else {
+				log.error("Kie Resource is null")
+			}
+		}
 	}
 
 	def fireFromFile(String file, List facts) {
 		KieServices kieServices = KieServices.Factory.get()
 		Resource resource = kieServices.resources.newClassPathResource(file)
-		fire(resource, facts)
+		if (resource) {
+			fire(resource, facts)
+		} else {
+			log.error("Kie Resource is null")
+		}
 	}
 
 	protected getDatabaseRule(Long id) {
 		String className = grailsApplication.config.grails.plugin.drools.domainClass
+		if (!className) {
+			log.error("You must set grails.plugin.drools.domainClass in Config.groovy")
+			return
+		}
 		Class clazz = grailsApplication.getDomainClass(className).clazz
 		clazz.get(id).value
 	}
 
 	protected getDatabaseRules(String packageName) {
 		String className = grailsApplication.config.grails.plugin.drools.domainClass
+		if (!className) {
+			log.error("You must set grails.plugin.drools.domainClass in Config.groovy")
+			return
+		}
 		Class clazz = grailsApplication.getDomainClass(className).clazz
 		def rules = ""
 		clazz.findAllByPackageName(packageName).each {
@@ -93,6 +127,7 @@ class DroolsService {
 			kieSession.insert fact
 		}
 		kieSession.fireAllRules()
+		// TODO add boolean to signature for dispose?
 		kieSession.dispose()
 	}
 

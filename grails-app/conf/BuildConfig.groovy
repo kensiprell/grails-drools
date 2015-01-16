@@ -46,7 +46,7 @@ grails.project.dependency.resolution = {
 			excludes "cdi-api", "junit", "kie-api", "mockito-all", "slf4j-api", "xstream"
 		}
 
-		// TODO excludes
+		// TODO replace the rest with this and excludes?
 		compile "org.kie:kie-spring:$droolsVersion"
 
 		/*
