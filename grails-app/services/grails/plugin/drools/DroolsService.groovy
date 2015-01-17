@@ -96,7 +96,7 @@ class DroolsService {
 			return
 		}
 		Class clazz = grailsApplication.getDomainClass(className).clazz
-		clazz.get(id).value
+		clazz.get(id).rule
 	}
 
 	protected getDatabaseRules(String packageName) {
@@ -108,7 +108,7 @@ class DroolsService {
 		Class clazz = grailsApplication.getDomainClass(className).clazz
 		def rules = ""
 		clazz.findAllByPackageName(packageName).each {
-			rules += "$it.value "
+			rules += "$it.rule "
 		}
 		rules.bytes
 	}

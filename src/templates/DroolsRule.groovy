@@ -1,17 +1,17 @@
-package grails.plugin.drools
+package @package.name@
 
 class DroolsRule {
 
-	String value
+	String rule
 	String description
 	String packageName
 
 	static mapping = {
-		value type: 'text'
+		rule type: 'text'
 	}
 
 	static constraints = {
-		value blank: false
+		rule blank: false
 		description blank: false
 		packageName blank: true
 	}

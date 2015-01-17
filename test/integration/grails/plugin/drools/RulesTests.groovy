@@ -63,7 +63,7 @@ class RulesTests extends Specification {
 	void "test executeFromDatabase with rule id"() {
 		given:
 		String drlText = new GroovyClassLoader().getResourceAsStream("rules.application.application.drl").text
-		def rule = new DroolsRule(value: drlText, description: "ticket.drl", packageName: "application").save(flush: true)
+		def rule = new DroolsRule(rule: drlText, description: "ticket.drl", packageName: "application").save(flush: true)
 		DroolsRule.withSession { it.clear() }
 
 		when: "age is over 18 and application is made this year"
@@ -92,9 +92,9 @@ class RulesTests extends Specification {
 		given:
 		def classLoader = new GroovyClassLoader()
 		String drlText = classLoader.getResourceAsStream("rules.application.application.drl").text
-		new DroolsRule(value: drlText, description: "application.drl", packageName: "application").save(flush: true)
+		new DroolsRule(rule: drlText, description: "application.drl", packageName: "application").save(flush: true)
 		drlText = classLoader.getResourceAsStream("rules.ticket.ticket.drl").text
-		new DroolsRule(value: drlText, description: "ticket.drl", packageName: "application").save(flush: true)
+		new DroolsRule(rule: drlText, description: "ticket.drl", packageName: "application").save(flush: true)
 		DroolsRule.withSession { it.clear() }
 
 		when: "age is over 18 and application is made this year"
@@ -146,7 +146,7 @@ class RulesTests extends Specification {
 
 		when:
 		String drlText = classLoader.getResourceAsStream("rules.ticket.ticket.drl").text
-		def rule = new DroolsRule(value: drlText, description: "ticket.drl", packageName: "ticket").save(flush: true)
+		def rule = new DroolsRule(rule: drlText, description: "ticket.drl", packageName: "ticket").save(flush: true)
 		DroolsRule.withSession { it.clear() }
 		droolsService.fireFromDatabase(rule.id, [t1, t1.customer, t2, t2.customer, t3, t3.customer])
 
@@ -168,9 +168,9 @@ class RulesTests extends Specification {
 
 		when:
 		String drlText = classLoader.getResourceAsStream("rules.ticket.ticket.drl").text
-		new DroolsRule(value: drlText, description: "ticket.drl", packageName: "ticket").save(flush: true)
+		new DroolsRule(rule: drlText, description: "ticket.drl", packageName: "ticket").save(flush: true)
 		drlText = classLoader.getResourceAsStream("rules.application.application.drl").text
-		new DroolsRule(value: drlText, description: "application.drl", packageName: "ticket").save(flush: true)
+		new DroolsRule(rule: drlText, description: "application.drl", packageName: "ticket").save(flush: true)
 		DroolsRule.withSession { it.clear() }
 		droolsService.fireFromDatabase("ticket", [t1, t1.customer, t2, t2.customer, t3, t3.customer])
 

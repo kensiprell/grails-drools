@@ -17,7 +17,6 @@ eventTestCompileEnd = {
 	copyFiles("${grailsSettings.testClassesDir}/integration")
 }
 
-// TODO Test
 eventCreateWarEnd = { warName, stagingDir ->
 	copyFiles("$stagingDir/WEB-INF/classes")
 }
