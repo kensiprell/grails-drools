@@ -1,6 +1,5 @@
-package @package.name@
-
-class DroolsRule {
+@artifact.package@
+class @artifact.name@ {
 
 	String rule
 	String description

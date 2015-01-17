@@ -100,7 +100,7 @@ All files in this directory and its subdirectories with a "drl" or "rule" suffix
 If you change the domain class used to store your rules, you will have to edit the corresponding configuration option in your ```grails-app/conf/Config.groovy```.
 
 ```
-grails.plugin.drools.ruleDomainClass = "com.example.DroolsRule"
+grails.plugin.drools.droolsRuleDomainClass = "com.example.DroolsRule"
 ```
 
 

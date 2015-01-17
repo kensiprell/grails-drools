@@ -1,3 +1,5 @@
+import grails.plugin.drools.DroolsDomainClassArtefactHandler
+
 class DroolsGrailsPlugin {
 
 	def version = "0.4.1"
@@ -19,6 +21,7 @@ class DroolsGrailsPlugin {
 	def license = "APACHE"
 	def issueManagement = [system: "github", url: "https://github.com/kensiprell/grails-drools/issues"]
 	def scm = [url: "https://github.com/kensiprell/grails-drools"]
+	def artefacts = [DroolsDomainClassArtefactHandler]
 
 	def doWithSpring = {
 		importBeans("drools-context.xml")
