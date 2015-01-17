@@ -1,4 +1,4 @@
-grails.plugin.drools.domainClass = "grails.plugin.drools.DroolsRule"
+grails.plugin.drools.ruleDomainClass = "grails.plugin.drools.DroolsRule"
 
 log4j = {
 	warn 'org.drools',

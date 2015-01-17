@@ -90,9 +90,9 @@ class DroolsService {
 	}
 
 	protected getDatabaseRule(Long id) {
-		String className = grailsApplication.config.grails.plugin.drools.domainClass
+		String className = grailsApplication.config.grails.plugin.drools.ruleDomainClass
 		if (!className) {
-			log.error("You must set grails.plugin.drools.domainClass in Config.groovy")
+			log.error("You must set grails.plugin.drools.ruleDomainClass in Config.groovy")
 			return
 		}
 		Class clazz = grailsApplication.getDomainClass(className).clazz
@@ -100,9 +100,9 @@ class DroolsService {
 	}
 
 	protected getDatabaseRules(String packageName) {
-		String className = grailsApplication.config.grails.plugin.drools.domainClass
+		String className = grailsApplication.config.grails.plugin.drools.ruleDomainClass
 		if (!className) {
-			log.error("You must set grails.plugin.drools.domainClass in Config.groovy")
+			log.error("You must set grails.plugin.drools.ruleDomainClass in Config.groovy")
 			return
 		}
 		Class clazz = grailsApplication.getDomainClass(className).clazz

@@ -68,6 +68,8 @@ Although Grails prefers convention over configuration, you cannot avoid some con
 
 After the plugin is installed you will find a heavily commented ```grails-app/conf/DroolsConfig.groovy``` that you can use as a starting point for configuring your beans. When your application is compiled this file is parsed and ```grails-app/conf/drools-context.xml``` is created (or overwritten). For example, [DroolsTestConfig.groovy](https://github.com/kensiprell/grails-drools/blob/master/grails-app/conf/DroolsTestConfig.groovy) is the one used for plugin integration tests.
 
+#### BuildConfig.groovy
+
 There are two options that you can configure in your ```grails-app/conf/BuildConfig.groovy```. The defaults are shown below:
 
 ```
@@ -75,7 +77,7 @@ grails.plugin.drools.configurationType = "droolsConfigGroovy"
 grails.plugin.drools.drlFileLocation = "src/rules"
 ```
 
-#### grails.plugin.drools.configurationType
+##### grails.plugin.drools.configurationType
 The option below will stop the plugin from overwriting ```grails-app/conf/drools-context.xml```. This will allow you to edit the file manually without losing changes.
 
 ```
@@ -83,7 +85,7 @@ grails.plugin.drools.configurationType = "droolsContextXml"
 ```
 
 
-#### grails.plugin.drools.drlFileLocation
+##### grails.plugin.drools.drlFileLocation
 This option is the directory root for Rule files, generally those files with a "drl" or "rule" suffix. Note the lack of leading and trailing slashes below:
 
 ```
@@ -93,6 +95,14 @@ grails.plugin.drools.drlFileLocation = "path/to/my/rules"
 You can take advantage of rule packages by creating subdirectories under ```drlFileLocation```. See the plugin's [src/rules](https://github.com/kensiprell/grails-drools/tree/master/src/rules) for an example.
 
 All files in this directory and its subdirectories with a "drl" or "rule" suffix will be copied to the classpath.
+
+#### Config.groovy
+If you change the domain class used to store your rules, you will have to edit the corresponding configuration option in your ```grails-app/conf/Config.groovy```.
+
+```
+grails.plugin.drools.ruleDomainClass = "com.example.DroolsRule"
+```
+
 
 #### DroolsConfig.groovy
 Setting the ```includeInConfig = false``` property will prevent that item from being included in ```grails-app/conf/drools-context.xml```. This will allow you to exclude it without having to delete or comment out its entire section. All other attributes are described in [Drools Spring Integration](http://docs.jboss.org/drools/release/6.1.0.Final/drools-docs/html/ch.kie.spring.html).
