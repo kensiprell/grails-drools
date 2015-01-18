@@ -16,7 +16,11 @@ eventCompileEnd = {
 }
 
 eventTestCompileEnd = {
-	copyFiles("${grailsSettings.testClassesDir}/integration")
+	def integrationPath = "${grailsSettings.testClassesDir}/integration"
+	def integrationDir = new File(integrationPath)
+	if (integrationDir.exists()) {
+		copyFiles(integrationPath)
+	}
 }
 
 eventCreateWarEnd = { warName, stagingDir ->
