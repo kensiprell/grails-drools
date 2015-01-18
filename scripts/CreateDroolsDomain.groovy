@@ -1,10 +1,8 @@
-import java.util.regex.Pattern
-
 includeTargets << grailsScript("_GrailsInit")
 includeTargets << grailsScript("_GrailsCreateArtifacts")
 includeTargets << grailsScript('_GrailsPackage')
 
-target('default': "Creates a Drools plugin domain class and updates Config.groovy") {
+target("default": "Creates a domain class for drools plugin rules and updates Config.groovy.") {
 	depends(checkVersion, parseArguments, compile, createConfig)
 
 	def type = "DroolsDomainClass"
