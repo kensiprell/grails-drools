@@ -2,6 +2,8 @@ import static groovy.io.FileType.FILES
 import grails.util.Environment
 import groovy.xml.MarkupBuilder
 
+includeTargets << new File("${droolsPluginDir}/scripts/_DroolsUtils.groovy")
+
 configurationType = grailsSettings.config.grails.plugin.drools.configurationType ?: "droolsConfigGroovy"
 drlFileLocation = grailsSettings.config.grails.plugin.drools.drlFileLocation ?: "src/rules"
 sourceDir = new File("${basedir}/${drlFileLocation}")
@@ -38,6 +40,10 @@ private writeDroolsContentXml(basedir, isPluginProject) {
 		droolsConfigFile = new File("${droolsPluginDir}/grails-app/conf/DroolsTestConfig.groovy").toURI().toURL()
 	} else {
 		droolsConfigFile = new File("${basedir}/grails-app/conf/DroolsConfig.groovy").toURI().toURL()
+		if (!droolsConfigFile) {
+			copyDroolsConfig()
+			droolsConfigFile = new File("${basedir}/grails-app/conf/DroolsConfig.groovy").toURI().toURL()
+		}
 	}
 	try {
 		droolsConfig = slurper.parse(droolsConfigFile)
@@ -48,6 +54,7 @@ private writeDroolsContentXml(basedir, isPluginProject) {
 		} else {
 			println "ERROR: grails-app/conf/DroolsConfig.groovy does not exist. Run 'grails create-drools-config'."
 		}
+		return
 	}
 	def writer = new StringWriter()
 	def droolsContentXml = new MarkupBuilder(writer)
