@@ -12,11 +12,15 @@ import org.kie.api.runtime.KieSession
 import org.kie.api.runtime.StatelessKieSession
 
 class DroolsService {
-	// TODO log.error strings
 
 	static transactional = false
 	def grailsApplication
 
+	/**
+	 * Execute rules retrieved from a single database record using a stateless session
+	 * @param id the database rule to use
+	 * @param facts objects to be inserted in the session
+	 */
 	def executeFromDatabase(Long id, List facts) {
 		String rule = getDatabaseRule(id)
 		if (rule) {
@@ -30,6 +34,11 @@ class DroolsService {
 		}
 	}
 
+	/**
+	 * Execute rules retrieved from a database based on the packageName property using a stateless session
+	 * @param packageName the database rules to use
+	 * @param facts objects to be inserted in the session
+	 */
 	def executeFromDatabase(String packageName, List facts) {
 		def rules = getDatabaseRules(packageName)
 		if (rules) {
@@ -43,6 +52,11 @@ class DroolsService {
 		}
 	}
 
+	/**
+	 * Execute rules retrieved from a single rule file (classpath) using a stateless session
+	 * @param file the rule file path to use
+	 * @param facts objects to be inserted in the session
+	 */
 	def executeFromFile(String file, List facts) {
 		KieServices kieServices = KieServices.Factory.get()
 		Resource resource = kieServices.resources.newClassPathResource(file)
@@ -53,6 +67,11 @@ class DroolsService {
 		}
 	}
 
+	/**
+	 * Fire rules retrieved from a single database record using a stateful session
+	 * @param id the database rule to use
+	 * @param facts objects to be inserted in the session
+	 */
 	def fireFromDatabase(Long id, List facts) {
 		String rule = getDatabaseRule(id)
 		if (rule) {
@@ -66,6 +85,11 @@ class DroolsService {
 		}
 	}
 
+	/**
+	 * Fire rules retrieved from a database based on the packageName property using a stateful session
+	 * @param packageName the database rules to use
+	 * @param facts objects to be inserted in the session
+	 */
 	def fireFromDatabase(String packageName, List facts) {
 		def rules = getDatabaseRules(packageName)
 		if (rules) {
@@ -79,6 +103,11 @@ class DroolsService {
 		}
 	}
 
+	/**
+	 * Fire rules retrieved from a single rule file (classpath) using a stateful session
+	 * @param file the rule file path to use
+	 * @param facts objects to be inserted in the session
+	 */
 	def fireFromFile(String file, List facts) {
 		KieServices kieServices = KieServices.Factory.get()
 		Resource resource = kieServices.resources.newClassPathResource(file)
