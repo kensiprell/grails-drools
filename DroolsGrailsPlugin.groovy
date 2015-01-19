@@ -24,7 +24,12 @@ class DroolsGrailsPlugin {
 	def artefacts = [DroolsDomainClassArtefactHandler]
 
 	def doWithSpring = {
-		importBeans("drools-context.xml")
+		try {
+			importBeans("drools-context.xml")
+		} catch (e) {
+			log.debug(e)
+			log.error "grails-app/conf/drools-context.xml does not exist. Try 'grails create-drools-config' or 'grails create-drools-context'."
+		}
 	}
 }
 

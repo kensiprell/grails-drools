@@ -66,7 +66,7 @@ plugins {
 ### Configuration
 Although Grails prefers convention over configuration, you cannot avoid some configuration for the Drools beans. 
 
-After the plugin is installed you will find a heavily commented ```grails-app/conf/DroolsConfig.groovy``` that you can use as a starting point for configuring your beans. When your application is compiled this file is parsed and ```grails-app/conf/drools-context.xml``` is created (or overwritten). For example, [DroolsTestConfig.groovy](https://github.com/kensiprell/grails-drools/blob/master/grails-app/conf/DroolsTestConfig.groovy) is the one used for plugin integration tests.
+After the plugin is installed you will find a heavily commented [DroolsConfig.groovy](https://github.com/kensiprell/grails-drools/blob/master/src/templates/conf/DroolsConfig.groovy) in ```grails-app/conf/``` that you can use as a starting point for configuring your beans. When your application is compiled this file is parsed and ```grails-app/conf/drools-context.xml``` is created (or overwritten). For example, [DroolsTestConfig.groovy](https://github.com/kensiprell/grails-drools/blob/master/grails-app/conf/DroolsTestConfig.groovy) is the one used for plugin integration tests.
 
 #### BuildConfig.groovy
 

@@ -1,6 +1,11 @@
 grails.project.work.dir = "target"
 grails.project.dependency.resolver = "maven"
 
+grails.project.dependency.distribution = {
+	remoteRepository(id: "localPluginReleases", url: "http://localhost:8081/artifactory/plugins-release-local/")
+	remoteRepository(id: "localPluginSnapshots", url: "http://localhost:8081/artifactory/plugins-snapshot-local/")
+}
+
 grails.project.dependency.resolution = {
 	inherits "global"
 	log "warn"
@@ -49,230 +54,141 @@ grails.project.dependency.resolution = {
 		compile "org.kie:kie-spring:$droolsVersion"
 
 		/*
-		<parent>
-		<groupId>org.drools</groupId>
-		<artifactId>droolsjbpm-integration</artifactId>
-		<version>6.2.0.CR4</version>
-		</parent>
-		<groupId>org.kie</groupId>
-		<artifactId>kie-spring</artifactId>
-		<packaging>bundle</packaging>
-		<name>Kie :: Spring</name>
-		<description>Drools and jBPM integration for Spring.</description>
-
-		<dependencies>
-		<dependency>
 		<groupId>org.jbpm</groupId>
 		<artifactId>jbpm-flow</artifactId>
-		</dependency>
-		<dependency>
+
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-tx</artifactId>
-		</dependency>
-		<dependency>
+
 		<groupId>org.kie</groupId>
 		<artifactId>kie-api</artifactId>
-		</dependency>
-		<dependency>
+
 		<groupId>org.kie</groupId>
 		<artifactId>kie-internal</artifactId>
-		</dependency>
-		<dependency>
+
 		<groupId>org.drools</groupId>
 		<artifactId>drools-core</artifactId>
-		</dependency>
-		<dependency>
+
 		<groupId>org.drools</groupId>
 		<artifactId>drools-compiler</artifactId>
-		</dependency>
-		<dependency>
+
 		<groupId>org.drools</groupId>
 		<artifactId>drools-decisiontables</artifactId>
-		</dependency>
-		<dependency>
+
 		<groupId>org.drools</groupId>
 		<artifactId>drools-persistence-jpa</artifactId>
 		<optional>true</optional>
-		</dependency>
-		<dependency>
+
 		<groupId>org.jbpm</groupId>
 		<artifactId>jbpm-persistence-jpa</artifactId>
 		<optional>true</optional>
-		</dependency>
-		<dependency>
+
 		<groupId>org.jbpm</groupId>
 		<artifactId>jbpm-human-task-core</artifactId>
 		<optional>true</optional>
-		</dependency>
-		<dependency>
+
 		<groupId>org.jbpm</groupId>
 		<artifactId>jbpm-human-task-jpa</artifactId>
 		<optional>true</optional>
-		</dependency>
-		<dependency>
+
 		<groupId>org.jbpm</groupId>
 		<artifactId>jbpm-runtime-manager</artifactId>
 		<optional>true</optional>
-		</dependency>
-		<dependency>
+
 		<groupId>com.sun.xml.bind</groupId>
 		<artifactId>jaxb-impl</artifactId>
 		<scope>provided</scope>
-		</dependency>
-		<dependency>
+
 		<groupId>com.sun.xml.bind</groupId>
 		<artifactId>jaxb-xjc</artifactId>
 		<scope>provided</scope>
-		</dependency>
 
-		<dependency>
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-core</artifactId>
-		<exclusions>
-		<exclusion>
+
 		<groupId>commons-logging</groupId>
 		<artifactId>commons-logging</artifactId>
-		</exclusion>
-		</exclusions>
-		</dependency>
 
-		<dependency>
+
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-beans</artifactId>
-		</dependency>
 
-		<dependency>
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-orm</artifactId>
 		<optional>true</optional>
-		</dependency>
-		<dependency>
+
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-jdbc</artifactId>
 		<optional>true</optional>
-		</dependency>
-		<dependency>
+
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-context</artifactId>
-		</dependency>
-		<dependency>
+
 		<groupId>org.hibernate.javax.persistence</groupId>
 		<artifactId>hibernate-jpa-2.0-api</artifactId>
 		<optional>true</optional>
-		</dependency>
-		<dependency>
+
 		<groupId>com.thoughtworks.xstream</groupId>
 		<artifactId>xstream</artifactId>
-		</dependency>
-		<!--  Logging  -->
-		<dependency>
+
 		<groupId>org.slf4j</groupId>
 		<artifactId>slf4j-api</artifactId>
-		</dependency>
-		<dependency>
-		<!--
-		 For unit test logging: configure in src/test/resources/logback-test.xml
-		-->
+
 		<groupId>ch.qos.logback</groupId>
 		<artifactId>logback-classic</artifactId>
-		<scope>test</scope>
-		</dependency>
-		<dependency>
+
 		<groupId>org.slf4j</groupId>
 		<artifactId>jcl-over-slf4j</artifactId>
 		<scope>test</scope>
-		</dependency>
-		<!--  needed for annotations/releaseId tests -->
-		<dependency>
+
 		<groupId>org.kie</groupId>
 		<artifactId>kie-ci</artifactId>
 		<scope>test</scope>
-		</dependency>
-		<dependency>
+
 		<groupId>org.drools</groupId>
 		<artifactId>drools-core</artifactId>
 		<type>test-jar</type>
 		<scope>test</scope>
-		</dependency>
-		<!--  test persistence  -->
-		<dependency>
+
 		<groupId>org.hibernate</groupId>
 		<artifactId>hibernate-entitymanager</artifactId>
 		<scope>test</scope>
-		</dependency>
-		<dependency>
+
 		<groupId>com.h2database</groupId>
 		<artifactId>h2</artifactId>
 		<scope>test</scope>
-		</dependency>
-		<dependency>
+
 		<groupId>org.codehaus.btm</groupId>
 		<artifactId>btm</artifactId>
 		<scope>test</scope>
-		</dependency>
-		<dependency>
+
 		<groupId>javax.enterprise</groupId>
 		<artifactId>cdi-api</artifactId>
 		<scope>provided</scope>
-		</dependency>
-		<!--  test  -->
-		<dependency>
+
 		<groupId>org.eclipse.jdt.core.compiler</groupId>
 		<artifactId>ecj</artifactId>
 		<scope>test</scope>
-		</dependency>
-		<dependency>
+
 		<groupId>org.antlr</groupId>
 		<artifactId>antlr-runtime</artifactId>
 		<scope>test</scope>
-		</dependency>
-		<dependency>
+
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-test</artifactId>
 		<scope>test</scope>
-		</dependency>
-		<dependency>
+
 		<groupId>org.drools</groupId>
 		<artifactId>named-kiesession</artifactId>
 		<scope>test</scope>
-		</dependency>
-		<dependency>
+
 		<groupId>org.jbpm</groupId>
 		<artifactId>jbpm-audit</artifactId>
 		<scope>test</scope>
-		</dependency>
-		</dependencies>
-		<build>
-		<testResources>
-		<testResource>
-		<filtering>false</filtering>
-		<directory>src/test/resources</directory>
-		</testResource>
-		<testResource>
-		<filtering>true</filtering>
-		<directory>src/test/filtered-resources</directory>
-		</testResource>
-		</testResources>
-		<plugins>
-		<plugin>
+
 		<groupId>org.apache.felix</groupId>
 		<artifactId>maven-bundle-plugin</artifactId>
 		<extensions>true</extensions>
-		<configuration>
-		<instructions>
-		<_removeheaders>Ignore-Package</_removeheaders>
-		<Bundle-SymbolicName>org.kie.spring</Bundle-SymbolicName>
-		<Bundle-Name>Kie Spring</Bundle-Name>
-		<Import-Package>
-		!org.kie.spring*, !org.drools.container.spring.beans.persistence, =javax.persistence.criteria;resolution:=optional, *
-		</Import-Package>
-		<Export-Package>org.kie.spring*</Export-Package>
-		</instructions>
-		</configuration>
-		</plugin>
-		</plugins>
-		</build>
-		</project>
 		 */
 
 		runtime "com.sun.xml.bind:jaxb-xjc:$comSunXmlBindVersion", {

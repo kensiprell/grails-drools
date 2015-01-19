@@ -71,108 +71,45 @@ private writeDroolsContentXml(basedir, isPluginProject) {
 					kieBase.kieSessions.each { kieSession ->
 						if (!kieSession.includeInConfig) return
 						"kie:ksession"(kieSession.attributes) {
-							kieSession.listeners.each { listener ->
-								if (!listener.includeInConfig) return
-								"kie:$listener.type"(listener.attributes)
+							kieSession.kieListeners.each { kieListener ->
+								if (!kieListener.includeInConfig) return
+								if (!listenerTypeCheck(kieListener.type)) return
+								if (kieListener.debug) {
+									"kie:$kieListener.type"()
+								}
+								if (!kieListener.debug && kieListener.ref && !kieListener.nestedBeanClass) {
+									"kie:$kieListener.type"(ref: kieListener.ref)
+								}
+								if (!kieListener.debug && !kieListener.ref && kieListener.nestedBeanClass) {
+									"kie:$kieListener.type"() {
+										bean(class: kieListener.nestedBeanClass)
+									}
+								}
 							}
 						}
 					}
 				}
 			}
 		}
-		// TODO iterate over event listeners
+		droolsConfig.kieEventListeners.each { listener ->
+			if (!listener.includeInConfig) return
+			bean(listener.attributes)
+		}
+		droolsConfig.kieEventListenerGroups.each { group ->
+			if (!group.includeInConfig) return
+			"kie:eventListeners"(id: group.id) {
+				group.listeners.each { listener ->
+					if (!listener.includeInConfig) return
+					if (!listenerTypeCheck(listener.type)) return
+					"kie:$listener.type"(ref: listener.ref)
+				}
+			}
+		}
 		bean(id: "kiePostProcessor", class: "org.kie.spring.KModuleBeanFactoryPostProcessor")
 	}
 	droolsContextXmlFile.write writer.toString()
 }
 
-/*
-Reference: http://docs.jboss.org/drools/release/6.1.0.Final/drools-docs/html/ch.kie.spring.html
-
-Example 11.4. Listener configuration example - using a bean:ref.
-<bean id="mock-agenda-listener" class="mocks.MockAgendaEventListener"/>
-<bean id="mock-rr-listener" class="mocks.MockRuleRuntimeEventListener"/>
-<bean id="mock-process-listener" class="mocks.MockProcessEventListener"/>
-<kie:kmodule id="listeners_kmodule">
-  <kie:kbase name="drl_kiesample" packages="drl_kiesample">
-    <kie:ksession name="ksession2">
-      <kie:agendaEventListener ref="mock-agenda-listener"/>
-      <kie:processEventListener ref="mock-process-listener"/>
-      <kie:ruleRuntimeEventListener ref="mock-rr-listener"/>
-    </kie:ksession>
-  </kie:kbase>
-</kie:kmodule>
-
-Example 11.5. Listener configuration example - using nested bean.
-<kie:kmodule id="listeners_module">
-  <kie:kbase name="drl_kiesample" packages="drl_kiesample">
-   <kie:ksession name="ksession1">
-      <kie:agendaEventListener>
-      <bean class="mocks.MockAgendaEventListener"/>
-      </kie:agendaEventListener>
-    </kie:ksession>
-  </kie:kbase>
-</kie:kmodule>
-
-Example 11.6. Listener configuration example - defaulting to the debug versions provided by the Knowledge-API .
-<bean id="mock-agenda-listener" class="mocks.MockAgendaEventListener"/>
-<bean id="mock-rr-listener" class="mocks.MockRuleRuntimeEventListener"/>
-<bean id="mock-process-listener" class="mocks.MockProcessEventListener"/>
-<kie:kmodule id="listeners_module">
- <kie:kbase name="drl_kiesample" packages="drl_kiesample">
-    <kie:ksession name="ksession2">
-      <kie:agendaEventListener />
-      <kie:processEventListener />
-      <kie:ruleRuntimeEventListener />
-    </kie:ksession>
- </kie:kbase>
-</kie:kmodule>
-
-Example 11.7. Listener configuration example - mix and match of 'ref'/nested-bean/empty styles.
-<bean id="mock-agenda-listener" class="mocks.MockAgendaEventListener"/>
-<bean id="mock-rr-listener" class="mocks.MockRuleRuntimeEventListener"/>
-<bean id="mock-process-listener" class="mocks.MockProcessEventListener"/>
-<kie:kmodule id="listeners_module">
-  <kie:kbase name="drl_kiesample" packages="drl_kiesample">
-    <kie:ksession name="ksession1">
-      <kie:agendaEventListener>
-          <bean class="org.kie.spring.mocks.MockAgendaEventListener"/>
-      </kie:agendaEventListener>
-    </kie:ksession>
-    <kie:ksession name="ksession2">
-      <kie:agendaEventListener ref="mock-agenda-listener"/>
-      <kie:processEventListener ref="mock-process-listener"/>
-      <kie:ruleRuntimeEventListener ref="mock-rr-listener"/>
-    </kie:ksession>
-  </kie:kbase>
-</kie:kmodule>
-
-Example 11.8. Listener configuration example - multiple listeners of the same type.
-<bean id="mock-agenda-listener" class="mocks.MockAgendaEventListener"/>
-<kie:kmodule id="listeners_module">
-  <kie:kbase name="drl_kiesample" packages="drl_kiesample">
-    <kie:ksession name="ksession1">
-      <kie:agendaEventListener ref="mock-agenda-listener"/>
-      <kie:agendaEventListener>
-          <bean class="org.kie.spring.mocks.MockAgendaEventListener"/>
-      </kie:agendaEventListener>
-    </kie:ksession>
-  </kie:kbase>
-</kie:kmodule>
-
-Example 11.9. Group of listeners - example
-<bean id="mock-agenda-listener" class="mocks.MockAgendaEventListener"/>
-<bean id="mock-rr-listener" class="mocks.MockRuleRuntimeEventListener"/>
-<bean id="mock-process-listener" class="mocks.MockProcessEventListener"/>
-<kie:kmodule id="listeners_module">
-  <kie:kbase name="drl_kiesample" packages="drl_kiesample">
-    <kie:ksession name="statelessWithGroupedListeners" type="stateless"
-             listeners-ref="debugListeners"/>
-  </kie:kbase>
-</kie:kmodule>
-<kie:eventListeners id="debugListeners">
-  <kie:agendaEventListener ref="mock-agenda-listener"/>
-  <kie:processEventListener ref="mock-process-listener"/>
-  <kie:ruleRuntimeEventListener ref="mock-rr-listener"/>
-</kie:eventListeners>
- */
+private listenerTypeCheck(type) {
+	["agendaEventListener", "processEventListener", "ruleRuntimeEventListener"].contains(type)
+}
