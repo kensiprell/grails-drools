@@ -50,7 +50,7 @@ class SomeOtherService {
 	}
 ```
 
-## Plugin Installation, Configuration, and Use
+## Plugin Installation and Configuration
 
 ### Installation
 Edit your ```BuildConfig.groovy```:
@@ -84,7 +84,6 @@ The option below will stop the plugin from overwriting ```grails-app/conf/drools
 grails.plugin.drools.configurationType = "droolsContextXml"
 ```
 
-
 ##### grails.plugin.drools.drlFileLocation
 This option is the directory root for Rule files, generally those files with a "drl" or "rule" suffix. Note the lack of leading and trailing slashes below:
 
@@ -97,16 +96,16 @@ You can take advantage of rule packages by creating subdirectories under ```drlF
 All files in this directory and its subdirectories with a "drl" or "rule" suffix will be copied to the classpath.
 
 #### Config.groovy
-If you change the domain class used to store your rules, you will have to edit the corresponding configuration option in your ```grails-app/conf/Config.groovy```.
+If you change the domain class used to store your rules without using the script ```create-drools-domain```, you will have to edit the corresponding configuration option in your ```grails-app/conf/Config.groovy```.
 
 ```
 grails.plugin.drools.droolsRuleDomainClass = "com.example.DroolsRule"
 ```
 
-
 #### DroolsConfig.groovy
-Setting the ```includeInConfig = false``` property will prevent that item from being included in ```grails-app/conf/drools-context.xml```. This will allow you to exclude it without having to delete or comment out its entire section. All other attributes are described in [Drools Spring Integration](http://docs.jboss.org/drools/release/6.1.0.Final/drools-docs/html/ch.kie.spring.html).
+See [DroolsConfig.groovy](https://github.com/kensiprell/grails-drools/blob/master/src/templates/conf/DroolsConfig.groovy) for configuration options and instructions. [Drools Spring Integration](http://docs.jboss.org/drools/release/6.1.0.Final/drools-docs/html/ch.kie.spring.html) provides more information.
 
+## Using the Plugin
 
 ### Drools Rule Files
 
@@ -136,72 +135,23 @@ and the KieBase packages property would be:
 packages: "rules.packageOne"
 ```
 
-
-
 ### Scripts
 The plugin offers three command-line scripts.
 
 #### create-drools-config
-TODO
+Running ```grails create-drools-config``` will copy the default [DroolsConfig.groovy](https://github.com/kensiprell/grails-drools/blob/master/src/templates/conf/DroolsConfig.groovy) to your application's ```grails-app/conf``` directory.
 
 #### create-drools-context
-TODO
+Running ```grails create-drools-context``` will copy the default [drools-context.xml](https://github.com/kensiprell/grails-drools/blob/master/src/templates/conf/drools-context.xml)  to your application's ```grails-app/conf``` directory.
 
 #### create-drools-domain
-TODO
+Running ```grails create-drools-config``` will create a domain class with a package and name of your choice. Use this class to store your rules in the database.
 
-### Event Listeners
-TODO 
-
-<!--Drools supports adding three types of listeners to KieSessions - AgendaListener, WorkingMemoryListener, ProcessEventListener
-The kie-spring module allows you to configure these listeners to KieSessions using XML tags. These tags have identical names as the actual listener interfaces i.e., <kie:agendaEventListener....>, <kie:ruleRuntimeEventListener....> and <kie:processEventListener....>.
-kie-spring provides features to define the listeners as standalone (individual) listeners and also to define them as a group.-->
-
-
-### Logging
-TODO
-
-<!--Drools supports adding 2 types of loggers to KieSessions - ConsoleLogger, FileLogger.
-
-The kie-spring module allows you to configure these loggers to KieSessions using XML tags. These tags have identical names as the actual logger interfaces i.e., <kie:consoleLogger....> and <kie:fileLogger....>.
-
-
-
-You can change the Drools log level by adding a line to your application's ```grails-app/conf/Config.groovy``` in the appropriate place. For example, to set the level to warn:
+It will also add or update the configuration option below in your application's ```grails-app/conf/Config.groovy```:
 
 ```
-warn "org.drools"
+grails.plugin.drools.droolsRuleDomainClass = "com.example.DroolsRule"
 ```
 
-You can change the plugin log level by adding a a line to your application's ```grails-app/conf/Config.groovy``` in the appropriate place. For example, to set the level to debug:
 
-```
-debug "org.grails.plugins.drools"
-```-->
 
-### Batch Commands
-TODO
-
-<!--A <kie:batch> element can be used to define a set of batch commands for a given ksession.This tag has no attributes and must be present directly under a <kie:ksession....> element. The commands supported are
-
-insert-object
-	ref = String (optional)
-	Anonymous bean
-set-global
-	identifier = String (required)
-	reg = String (optional)
-	Anonymous bean
-fire-all-rules
-	max : n
-	fire-until-halt
-start-process
-	parameter
-	identifier = String (required)
-	ref = String (optional)
-	Anonymous bean
-signal-event
-	ref = String (optional)
-	event-type = String (required)
-	process-instance-id =n (optional)
-
--->
