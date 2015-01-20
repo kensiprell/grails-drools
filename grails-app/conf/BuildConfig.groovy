@@ -17,7 +17,7 @@ grails.project.dependency.resolution = {
 	}
 
 	dependencies {
-		String droolsVersion = "6.2.0.CR4" //"6.1.0.Final"
+		String droolsVersion = "6.2.0.CR4"
 		String comSunXmlBindVersion = "2.2.11"
 
 		compile "org.drools:drools-compiler:$droolsVersion", {
@@ -100,8 +100,8 @@ spring-test
 
 		runtime "com.thoughtworks.xstream:xstream:1.4.7", {
 			excludes "cglib-nodep", "commons-lang", "dom4j", "jdom", "jettison", "jmock", "joda-time",
-				"json", "junit", "kxml2", "kxml2-min", "oro", "stax", "stax-api",
-				"wstx-asl", "xml-writer", "xmlpull", "xom", "xpp3_min"
+				     "json", "junit", "kxml2", "kxml2-min", "oro", "stax", "stax-api",
+				     "wstx-asl", "xml-writer", "xmlpull", "xom", "xpp3_min"
 		}
 
 		runtime "org.eclipse.jdt.core.compiler:ecj:4.4"

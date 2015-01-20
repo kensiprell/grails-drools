@@ -1,5 +1,3 @@
-## Do not use. The plugin is still under development.
-
 ## Grails plugin for integrating Drools
 
 [Drools](https://www.drools.org) is a Business Rules Management System (BRMS) solution. The plugin fully supports Drools [kie-spring](https://docs.jboss.org/drools/release/6.2.0.CR4/drools-docs/html/ch.kie.spring.html) integration.
@@ -55,7 +53,7 @@ Edit your `BuildConfig.groovy`:
 
     plugins {
        // other plugins
-       compile ":drools:0.4.1"
+       compile ":drools:0.9.0"
     }
 
 ### Configuration
