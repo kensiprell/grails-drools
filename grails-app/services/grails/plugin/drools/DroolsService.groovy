@@ -1,12 +1,12 @@
 package grails.plugin.drools
 
-import org.kie.api.io.Resource
 import org.kie.api.KieBase
 import org.kie.api.KieServices
 import org.kie.api.builder.KieBuilder
 import org.kie.api.builder.KieFileSystem
 import org.kie.api.builder.Message
 import org.kie.api.builder.Results
+import org.kie.api.io.Resource
 import org.kie.api.runtime.KieContainer
 import org.kie.api.runtime.KieSession
 import org.kie.api.runtime.StatelessKieSession
@@ -14,6 +14,7 @@ import org.kie.api.runtime.StatelessKieSession
 class DroolsService {
 
 	static transactional = false
+
 	def grailsApplication
 
 	/**
@@ -23,15 +24,12 @@ class DroolsService {
 	 */
 	def executeFromDatabase(Long id, List facts) {
 		String rule = getDatabaseRule(id)
-		if (rule) {
-			KieServices kieServices = KieServices.Factory.get()
-			Resource resource = kieServices.resources.newByteArrayResource(rule.bytes)
-			if (resource) {
-				execute(resource, facts)
-			} else {
-				log.error("Kie Resource is null")
-			}
+		if (!rule) {
+			return
 		}
+
+		Resource resource = KieServices.Factory.get().resources.newByteArrayResource(rule.bytes)
+		execute(resource, facts)
 	}
 
 	/**
@@ -41,14 +39,15 @@ class DroolsService {
 	 */
 	def executeFromDatabase(String packageName, List facts) {
 		def rules = getDatabaseRules(packageName)
-		if (rules) {
-			KieServices kieServices = KieServices.Factory.get()
-			Resource resource = kieServices.resources.newByteArrayResource(rules)
-			if (resource){
-				fire(resource, facts)
-			} else {
-				log.error("Kie Resource is null")
-			}
+		if (!rules) {
+			return
+		}
+
+		Resource resource = KieServices.Factory.get().resources.newByteArrayResource(rules)
+		if (resource){
+			fire(resource, facts)
+		} else {
+			log.error("Kie Resource is null")
 		}
 	}
 
@@ -58,13 +57,8 @@ class DroolsService {
 	 * @param facts objects to be inserted in the session
 	 */
 	def executeFromFile(String file, List facts) {
-		KieServices kieServices = KieServices.Factory.get()
-		Resource resource = kieServices.resources.newClassPathResource(file)
-		if (resource) {
-			execute(resource, facts)
-		} else {
-			log.error("Kie Resource is null")
-		}
+		Resource resource = KieServices.Factory.get().resources.newClassPathResource(file)
+		execute(resource, facts)
 	}
 
 	/**
@@ -74,15 +68,12 @@ class DroolsService {
 	 */
 	def fireFromDatabase(Long id, List facts) {
 		String rule = getDatabaseRule(id)
-		if (rule) {
-			KieServices kieServices = KieServices.Factory.get()
-			Resource resource = kieServices.resources.newByteArrayResource(rule.bytes)
-			if (resource) {
-				fire(resource, facts)
-			} else {
-				log.error("Kie Resource is null")
-			}
+		if (!rule) {
+			return
 		}
+
+		Resource resource = KieServices.Factory.get().resources.newByteArrayResource(rule.bytes)
+		fire(resource, facts)
 	}
 
 	/**
@@ -92,15 +83,12 @@ class DroolsService {
 	 */
 	def fireFromDatabase(String packageName, List facts) {
 		def rules = getDatabaseRules(packageName)
-		if (rules) {
-			KieServices kieServices = KieServices.Factory.get()
-			Resource resource = kieServices.resources.newByteArrayResource(rules)
-			if (resource) {
-				fire(resource, facts)
-			} else {
-				log.error("Kie Resource is null")
-			}
+		if (!rules) {
+			return
 		}
+
+		Resource resource = KieServices.Factory.get().resources.newByteArrayResource(rules)
+		fire(resource, facts)
 	}
 
 	/**
@@ -109,47 +97,42 @@ class DroolsService {
 	 * @param facts objects to be inserted in the session
 	 */
 	def fireFromFile(String file, List facts) {
-		KieServices kieServices = KieServices.Factory.get()
-		Resource resource = kieServices.resources.newClassPathResource(file)
-		if (resource) {
-			fire(resource, facts)
-		} else {
-			log.error("Kie Resource is null")
-		}
+		Resource resource = KieServices.Factory.get().resources.newClassPathResource(file)
+		fire(resource, facts)
 	}
 
 	protected getDatabaseRule(Long id) {
-		String className = grailsApplication.config.grails.plugin.drools.droolsRuleDomainClass
-		if (!className) {
-			log.error("You must set grails.plugin.drools.droolsRuleDomainClass in Config.groovy")
-			return
-		}
-		Class clazz = grailsApplication.getDomainClass(className).clazz
-		clazz.get(id).rule
+		droolsRuleDomainClass?.get(id)?.rule
 	}
 
 	protected getDatabaseRules(String packageName) {
-		String className = grailsApplication.config.grails.plugin.drools.droolsRuleDomainClass
-		if (!className) {
-			log.error("You must set grails.plugin.drools.droolsRuleDomainClass in Config.groovy")
+		def domainClass = droolsRuleDomainClass
+		if (!domainClass) {
 			return
 		}
-		Class clazz = grailsApplication.getDomainClass(className).clazz
-		def rules = ""
-		clazz.findAllByPackageName(packageName).each {
-			rules += "$it.rule "
-		}
-		rules.bytes
+
+		def rules = new StringBuilder()
+		domainClass.findAllByPackageName(packageName).each { rules << it.rule << ' ' }
+		rules.toString().bytes
 	}
 
-	protected static execute(Resource resource, List facts) {
-		Object[] factsObj = facts
+	protected execute(Resource resource, List facts) {
+		if (!resource) {
+			log.error("Kie Resource is null")
+			return
+		}
+
 		KieBase kieBase = buildKieBase(resource)
 		StatelessKieSession kieSession = kieBase.newStatelessKieSession()
-		kieSession.execute(Arrays.asList(factsObj))
+		kieSession.execute(facts)
 	}
 
-	protected static fire(Resource resource, List facts) {
+	protected fire(Resource resource, List facts) {
+		if (!resource) {
+			log.error("Kie Resource is null")
+			return
+		}
+
 		KieBase kieBase = buildKieBase(resource)
 		KieSession kieSession = kieBase.newKieSession()
 		for (fact in facts) {
@@ -160,7 +143,7 @@ class DroolsService {
 		kieSession.dispose()
 	}
 
-	protected static KieBase buildKieBase(Resource resource) {
+	protected KieBase buildKieBase(Resource resource) {
 		KieServices kieServices = KieServices.Factory.get()
 		KieFileSystem kfs = kieServices.newKieFileSystem()
 		kfs.write("src/main/resources/rule.drl", resource)
@@ -171,5 +154,14 @@ class DroolsService {
 		}
 		KieContainer kieContainer = kieServices.newKieContainer(kieServices.repository.defaultReleaseId)
 		kieContainer.kieBase
+	}
+
+	protected Class getDroolsRuleDomainClass() {
+		String className = grailsApplication.config.grails.plugin.drools.droolsRuleDomainClass
+		if (!className) {
+			log.error("You must set grails.plugin.drools.droolsRuleDomainClass in Config.groovy")
+			return null
+		}
+		grailsApplication.getDomainClass(className).clazz
 	}
 }

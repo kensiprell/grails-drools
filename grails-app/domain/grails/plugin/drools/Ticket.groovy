@@ -1,11 +1,11 @@
 package grails.plugin.drools
 
 class Ticket {
-	int id
 	Customer customer
 	String status
 
-	Ticket(Integer id, Customer customer) {
+	Ticket(Long id, Customer customer) {
+		this()
 		this.id = id
 		this.customer = customer
 		status = 'New'

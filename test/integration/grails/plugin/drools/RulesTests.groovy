@@ -1,10 +1,11 @@
 package grails.plugin.drools
 
+import grails.test.spock.IntegrationSpec
+
 import org.kie.api.runtime.KieSession
 import org.kie.api.runtime.StatelessKieSession
-import spock.lang.Specification
 
-class RulesTests extends Specification {
+class RulesTests extends IntegrationSpec {
 
 	def droolsService
 	StatelessKieSession applicationStatelessSession
@@ -15,8 +16,8 @@ class RulesTests extends Specification {
 		when: "age is over 18 and application is made this year"
 		def applicant = new Applicant(name: "A Smith", age: 20)
 		def application = new Application(dateApplied: new Date())
-		Object [] facts = [applicant, application]
-		applicationStatelessSession.execute(Arrays.asList(facts))
+		def facts = [applicant, application]
+		applicationStatelessSession.execute(facts)
 		then:
 		application.valid
 
@@ -24,7 +25,7 @@ class RulesTests extends Specification {
 		applicant = new Applicant(name: "B Smith", age: 17)
 		application = new Application(dateApplied: new Date())
 		facts = [applicant, application]
-		applicationStatelessSession.execute(Arrays.asList(facts))
+		applicationStatelessSession.execute(facts)
 		then:
 		!application.valid
 
@@ -32,7 +33,7 @@ class RulesTests extends Specification {
 		applicant = new Applicant(name: "C Smith", age: 20)
 		application = new Application(dateApplied: new Date(114, 0, 1))
 		facts = [applicant, application]
-		applicationStatelessSession.execute(Arrays.asList(facts))
+		applicationStatelessSession.execute(facts)
 		then:
 		!application.valid
 	}

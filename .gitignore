@@ -1,0 +1,8 @@
+.DS_Store
+*.log
+/.settings
+/grails-drools-*.zip
+/grails-drools-*.zip.sha1
+/plugin.xml
+/target
+/web-app

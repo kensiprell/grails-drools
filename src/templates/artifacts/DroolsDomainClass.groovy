@@ -1,7 +1,7 @@
 @artifact.package@class @artifact.name@ {
 
 	String rule        // Do not change or delete this field.
-	String packageName // Do not change ore delete this field.
+	String packageName // Do not change or delete this field.
 	String description
 
 	static mapping = {
