@@ -6,6 +6,7 @@ class Customer {
 	int discount
 
 	Customer(String name, String subscription) {
+		this()
 		this.name = name
 		this.subscription = subscription
 	}

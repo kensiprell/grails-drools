@@ -19,7 +19,7 @@ rule "Bronze Priority"
 		ticket.setStatus("Pending");
 		update(ticket);
 end
-  
+
 rule "Silver Priority"
 	when
 		customer : Customer(subscription == "Silver")
@@ -27,7 +27,7 @@ rule "Silver Priority"
 	then
 		System.out.println("Firing rule Silver Priority for Ticket # " + ticket.getId());
 		ticket.setStatus("Escalate");
-		update(ticket);	
+		update(ticket);
 end
 
 rule "Gold Priority"
@@ -37,7 +37,7 @@ rule "Gold Priority"
 	then
 		System.out.println("Firing rule Gold Priority for Ticket # " + ticket.getId());
 		ticket.setStatus("Escalate");
-		update(ticket);	
+		update(ticket);
 end
 
 rule "Special Discount"

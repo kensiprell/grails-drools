@@ -22,29 +22,29 @@ grails.project.dependency.resolution = {
 
 		compile "org.drools:drools-compiler:$droolsVersion", {
 			excludes "activation", "antlr-runtime", "cdi-api", "drools-core", "ecj", "glazedlists_java15",
-				"gunit", "janino", "junit", "logback-classic", "mockito-all", "mvel2",
-				"org.osgi.compendium", "org.osgi.core", "quartz", "slf4j-api",
-				"stax-api", "weld-se-core", "xstream"
+			         "gunit", "janino", "junit", "logback-classic", "mockito-all", "mvel2",
+			         "org.osgi.compendium", "org.osgi.core", "quartz", "slf4j-api",
+			         "stax-api", "weld-se-core", "xstream"
 		}
 		compile "org.drools:drools-core:$droolsVersion", {
 			excludes "activation", "antlr", "antlr-runtime", "cdi-api", "junit", "kie-api", "kie-internal",
-				"logback-classic", "mockito-all", "mvel2", "org.osgi.compendium", "org.osgi.core",
-				"protobuf-java", "slf4j-api", "stax-api", "xstream"    //
+			         "logback-classic", "mockito-all", "mvel2", "org.osgi.compendium", "org.osgi.core",
+			         "protobuf-java", "slf4j-api", "stax-api", "xstream"    //
 		}
 		compile "org.drools:drools-decisiontables:$droolsVersion", {
 			excludes "commons-io", "drools-compiler", "drools-core", "drools-templates", "junit", "logback-classic",
-				"mockito-all", "org.osgi.compendium", "org.osgi.core", "poi-ooxml", "slf4j-api"
+			         "mockito-all", "org.osgi.compendium", "org.osgi.core", "poi-ooxml", "slf4j-api"
 		}
 		compile "org.drools:drools-jsr94:$droolsVersion", {
 			excludes "drools-compiler", "drools-core", "drools-decisiontables", "jsr94", "jsr94-sigtest",
-				"jsr94-tck", "junit", "mockito-all"
+			         "jsr94-tck", "junit", "mockito-all"
 		}
 		compile "org.drools:drools-verifier:$droolsVersion", {
 			excludes "drools-compiler", "guava", "itext", "junit", "kie-api", "mockito-all", "xstream"
 		}
 		compile "org.kie:kie-api:$droolsVersion", {
 			excludes "activation", "cdi-api", "jms", "junit", "mockito-all", "org.osgi.compendium",
-				"org.osgi.core", "quartz", "slf4j-api", "stax-api", "xstream"
+			         "org.osgi.core", "quartz", "slf4j-api", "stax-api", "xstream"
 		}
 		compile "org.kie:kie-internal:$droolsVersion", {
 			excludes "cdi-api", "junit", "kie-api", "mockito-all", "slf4j-api", "xstream"
