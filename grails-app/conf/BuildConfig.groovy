@@ -50,146 +50,42 @@ grails.project.dependency.resolution = {
 			excludes "cdi-api", "junit", "kie-api", "mockito-all", "slf4j-api", "xstream"
 		}
 
-		// TODO replace the rest with this and excludes?
-		compile "org.kie:kie-spring:$droolsVersion"
+		// TODO finish excludes
+		compile "org.kie:kie-spring:$droolsVersion", {
+			excludes "antlr-runtime", "cdi-api", "drools-compiler", "drools-core", "drools-decisiontables",
+				"ecj", "jaxb-impl", "jaxb-xjc", "kie-api", "kie-internal", "logback-classic", "slf4j-api",
+				"xstream"
+		}
+/*
+Check Grails core +
+kie-spring dependencies not yet excluded:
+commons-logging
+jbpm-flow
+spring-beans
+spring-context
+spring-core
+spring-tx
 
-		/*
-		<groupId>org.jbpm</groupId>
-		<artifactId>jbpm-flow</artifactId>
+Optional:
+drools-persistence-jpa 
+hibernate-jpa-2.0-api 
+jbpm-human-task-core 
+jbpm-human-task-jpa 
+jbpm-persistence-jpa 
+jbpm-runtime-manager 
+spring-jdbc 
+spring-orm 
 
-		<groupId>org.springframework</groupId>
-		<artifactId>spring-tx</artifactId>
-
-		<groupId>org.kie</groupId>
-		<artifactId>kie-api</artifactId>
-
-		<groupId>org.kie</groupId>
-		<artifactId>kie-internal</artifactId>
-
-		<groupId>org.drools</groupId>
-		<artifactId>drools-core</artifactId>
-
-		<groupId>org.drools</groupId>
-		<artifactId>drools-compiler</artifactId>
-
-		<groupId>org.drools</groupId>
-		<artifactId>drools-decisiontables</artifactId>
-
-		<groupId>org.drools</groupId>
-		<artifactId>drools-persistence-jpa</artifactId>
-		<optional>true</optional>
-
-		<groupId>org.jbpm</groupId>
-		<artifactId>jbpm-persistence-jpa</artifactId>
-		<optional>true</optional>
-
-		<groupId>org.jbpm</groupId>
-		<artifactId>jbpm-human-task-core</artifactId>
-		<optional>true</optional>
-
-		<groupId>org.jbpm</groupId>
-		<artifactId>jbpm-human-task-jpa</artifactId>
-		<optional>true</optional>
-
-		<groupId>org.jbpm</groupId>
-		<artifactId>jbpm-runtime-manager</artifactId>
-		<optional>true</optional>
-
-		<groupId>com.sun.xml.bind</groupId>
-		<artifactId>jaxb-impl</artifactId>
-		<scope>provided</scope>
-
-		<groupId>com.sun.xml.bind</groupId>
-		<artifactId>jaxb-xjc</artifactId>
-		<scope>provided</scope>
-
-		<groupId>org.springframework</groupId>
-		<artifactId>spring-core</artifactId>
-
-		<groupId>commons-logging</groupId>
-		<artifactId>commons-logging</artifactId>
-
-
-		<groupId>org.springframework</groupId>
-		<artifactId>spring-beans</artifactId>
-
-		<groupId>org.springframework</groupId>
-		<artifactId>spring-orm</artifactId>
-		<optional>true</optional>
-
-		<groupId>org.springframework</groupId>
-		<artifactId>spring-jdbc</artifactId>
-		<optional>true</optional>
-
-		<groupId>org.springframework</groupId>
-		<artifactId>spring-context</artifactId>
-
-		<groupId>org.hibernate.javax.persistence</groupId>
-		<artifactId>hibernate-jpa-2.0-api</artifactId>
-		<optional>true</optional>
-
-		<groupId>com.thoughtworks.xstream</groupId>
-		<artifactId>xstream</artifactId>
-
-		<groupId>org.slf4j</groupId>
-		<artifactId>slf4j-api</artifactId>
-
-		<groupId>ch.qos.logback</groupId>
-		<artifactId>logback-classic</artifactId>
-
-		<groupId>org.slf4j</groupId>
-		<artifactId>jcl-over-slf4j</artifactId>
-		<scope>test</scope>
-
-		<groupId>org.kie</groupId>
-		<artifactId>kie-ci</artifactId>
-		<scope>test</scope>
-
-		<groupId>org.drools</groupId>
-		<artifactId>drools-core</artifactId>
-		<type>test-jar</type>
-		<scope>test</scope>
-
-		<groupId>org.hibernate</groupId>
-		<artifactId>hibernate-entitymanager</artifactId>
-		<scope>test</scope>
-
-		<groupId>com.h2database</groupId>
-		<artifactId>h2</artifactId>
-		<scope>test</scope>
-
-		<groupId>org.codehaus.btm</groupId>
-		<artifactId>btm</artifactId>
-		<scope>test</scope>
-
-		<groupId>javax.enterprise</groupId>
-		<artifactId>cdi-api</artifactId>
-		<scope>provided</scope>
-
-		<groupId>org.eclipse.jdt.core.compiler</groupId>
-		<artifactId>ecj</artifactId>
-		<scope>test</scope>
-
-		<groupId>org.antlr</groupId>
-		<artifactId>antlr-runtime</artifactId>
-		<scope>test</scope>
-
-		<groupId>org.springframework</groupId>
-		<artifactId>spring-test</artifactId>
-		<scope>test</scope>
-
-		<groupId>org.drools</groupId>
-		<artifactId>named-kiesession</artifactId>
-		<scope>test</scope>
-
-		<groupId>org.jbpm</groupId>
-		<artifactId>jbpm-audit</artifactId>
-		<scope>test</scope>
-
-		<groupId>org.apache.felix</groupId>
-		<artifactId>maven-bundle-plugin</artifactId>
-		<extensions>true</extensions>
-		 */
+Test:
+btm 
+h2 
+hibernate-entitymanager 
+jbpm-audit 
+jcl-over-slf4j 
+kie-ci 
+named-kiesession 
+spring-test 
+*/
 
 		runtime "com.sun.xml.bind:jaxb-xjc:$comSunXmlBindVersion", {
 			excludes "jaxb-core"
@@ -200,7 +96,7 @@ grails.project.dependency.resolution = {
 
 		// TODO find more recent version
 		// java.lang.NoClassDefFoundError: org/codehaus/janino/Scanner$ScanException in 2.7.6 and above
-		runtime "org.codehaus.janino:janino:2.5.16", {
+		runtime "org.codehaus.janino:janino:2.7.4", {   //2.6.1
 			excludes "ant-nodeps", "junit"
 		}
 
@@ -219,24 +115,6 @@ grails.project.dependency.resolution = {
 		runtime "org.antlr:antlr-runtime:3.5.2", {
 			excludes "junit", "stringtemplate"
 		}
-
-		//		drools-persistence-jpa-6.0.0.CR5
-		//		drools-templates-6.0.0.CR5
-		//		bcmail-jdk14-138
-		//		bcprov-jdk14-138
-		//		dom4j-1.6.1
-		//		guava-13.0.1
-		//		hibernate-jpa-2.0-api-1.0.1.Final
-		//		itext-2.1.2
-		//		javassist-3.15.0-GA
-		//		jsr94-1.1
-		//		poi-3.9
-		//		poi-ooxml-3.9
-		//		poi-ooxml-schemas-3.9
-		//		stax-api-1.0.1
-		//		xml-apis-1.3.04
-		//		xmlbeans-2.3.0
-		//		xmlpull-1.1.3.1
 	}
 
 	plugins {
