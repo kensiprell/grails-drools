@@ -53,8 +53,8 @@ grails.project.dependency.resolution = {
 		// TODO finish excludes
 		compile "org.kie:kie-spring:$droolsVersion", {
 			excludes "antlr-runtime", "cdi-api", "drools-compiler", "drools-core", "drools-decisiontables",
-				"ecj", "jaxb-impl", "jaxb-xjc", "kie-api", "kie-internal", "logback-classic", "slf4j-api",
-				"xstream"
+				     "ecj", "jaxb-impl", "jaxb-xjc", "kie-api", "kie-internal", "logback-classic", "slf4j-api",
+				     "xstream"
 		}
 /*
 Check Grails core +
@@ -94,9 +94,7 @@ spring-test
 			excludes "FastInfoset", "jaxb-core"
 		}
 
-		// TODO find more recent version
-		// java.lang.NoClassDefFoundError: org/codehaus/janino/Scanner$ScanException in 2.7.6 and above
-		runtime "org.codehaus.janino:janino:2.7.4", {   //2.6.1
+		runtime "org.codehaus.janino:janino:2.7.5", {
 			excludes "ant-nodeps", "junit"
 		}
 

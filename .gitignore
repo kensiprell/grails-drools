@@ -14,10 +14,9 @@ stacktrace.log
 *Db.script
 /plugin.xml
 /*DB.*
-/.idea/
-/.link_to_grails_plugins/
-/out/
-/target/
-/target-eclipse/
-/web-app/plugins
-/web-app/WEB-INF/classes
+/.idea
+/.link_to_grails_plugins
+/out
+/target
+/target-eclipse
+/web-app
