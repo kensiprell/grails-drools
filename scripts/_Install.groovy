@@ -1,6 +1,6 @@
-includeTargets << new File("${droolsPluginDir}/scripts/_DroolsUtils.groovy")
+includeTargets << new File(droolsPluginDir, "scripts/_DroolsUtils.groovy")
 
-def droolsConfigFile = new File("${basedir}/grails-app/conf/DroolsConfig.groovy")
+def droolsConfigFile = new File(basedir, "grails-app/conf/DroolsConfig.groovy")
 if (!droolsConfigFile.exists()) {
 	copyDroolsConfig()
 }
@@ -17,5 +17,3 @@ println """
 *                                                     *
 *******************************************************
 """
-
-

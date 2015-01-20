@@ -21,11 +21,7 @@ public class DroolsDomainClassArtefactHandler extends ArtefactHandlerAdapter {
 
 		public String getKey() {
 			Object key = GrailsClassUtils.getStaticPropertyValue(getClazz(), "key");
-			if (key == null) {
-				return null;
-			} else {
-				return key.toString();
-			}
+			return (key == null) ? null : key.toString();
 		}
 	}
 
