@@ -5,6 +5,7 @@ class Ticket {
 	String status
 
 	Ticket(Long id, Customer customer) {
+		this()
 		this.id = id
 		this.customer = customer
 		status = 'New'
