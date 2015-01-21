@@ -139,7 +139,6 @@ class DroolsService {
 			kieSession.insert fact
 		}
 		kieSession.fireAllRules()
-		// TODO add boolean to signature for dispose?
 		kieSession.dispose()
 	}
 

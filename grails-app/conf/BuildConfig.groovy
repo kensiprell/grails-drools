@@ -50,42 +50,12 @@ grails.project.dependency.resolution = {
 			excludes "cdi-api", "junit", "kie-api", "mockito-all", "slf4j-api", "xstream"
 		}
 
-		// TODO finish excludes
 		compile "org.kie:kie-spring:$droolsVersion", {
-			excludes "antlr-runtime", "cdi-api", "drools-compiler", "drools-core", "drools-decisiontables",
-				     "ecj", "jaxb-impl", "jaxb-xjc", "kie-api", "kie-internal", "logback-classic", "slf4j-api",
-				     "xstream"
+			excludes "antlr-runtime", "cdi-api", "commons-logging", "drools-compiler", "drools-core",
+				     "drools-decisiontables","ecj", "h2", "jaxb-impl", "jaxb-xjc", "kie-api", "kie-internal",
+				     "logback-classic", "slf4j-api", "spring-beans", "spring-context", "spring-core",
+				      "spring-jdbc", "spring-test", "spring-tx", "xstream"
 		}
-/*
-Check Grails core +
-kie-spring dependencies not yet excluded:
-commons-logging
-jbpm-flow
-spring-beans
-spring-context
-spring-core
-spring-tx
-
-Optional:
-drools-persistence-jpa 
-hibernate-jpa-2.0-api 
-jbpm-human-task-core 
-jbpm-human-task-jpa 
-jbpm-persistence-jpa 
-jbpm-runtime-manager 
-spring-jdbc 
-spring-orm 
-
-Test:
-btm 
-h2 
-hibernate-entitymanager 
-jbpm-audit 
-jcl-over-slf4j 
-kie-ci 
-named-kiesession 
-spring-test 
-*/
 
 		runtime "com.sun.xml.bind:jaxb-xjc:$comSunXmlBindVersion", {
 			excludes "jaxb-core"
