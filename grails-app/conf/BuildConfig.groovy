@@ -17,7 +17,7 @@ grails.project.dependency.resolution = {
 	}
 
 	dependencies {
-		String droolsVersion = "6.2.0.CR4"
+		String droolsVersion = "6.1.0.Final" //"6.1.0.Final" "6.2.0.CR4"
 		String comSunXmlBindVersion = "2.2.11"
 
 		compile "org.drools:drools-compiler:$droolsVersion", {
@@ -29,7 +29,7 @@ grails.project.dependency.resolution = {
 		compile "org.drools:drools-core:$droolsVersion", {
 			excludes "activation", "antlr", "antlr-runtime", "cdi-api", "junit", "kie-api", "kie-internal",
 			         "logback-classic", "mockito-all", "mvel2", "org.osgi.compendium", "org.osgi.core",
-			         "protobuf-java", "slf4j-api", "stax-api", "xstream"    //
+			         "protobuf-java", "slf4j-api", "stax-api", "xstream"
 		}
 		compile "org.drools:drools-decisiontables:$droolsVersion", {
 			excludes "commons-io", "drools-compiler", "drools-core", "drools-templates", "junit", "logback-classic",
@@ -41,6 +41,7 @@ grails.project.dependency.resolution = {
 		}
 		compile "org.drools:drools-verifier:$droolsVersion", {
 			excludes "drools-compiler", "guava", "itext", "junit", "kie-api", "mockito-all", "xstream"
+
 		}
 		compile "org.kie:kie-api:$droolsVersion", {
 			excludes "activation", "cdi-api", "jms", "junit", "mockito-all", "org.osgi.compendium",
@@ -52,9 +53,9 @@ grails.project.dependency.resolution = {
 
 		compile "org.kie:kie-spring:$droolsVersion", {
 			excludes "antlr-runtime", "cdi-api", "commons-logging", "drools-compiler", "drools-core",
-				     "drools-decisiontables","ecj", "h2", "jaxb-impl", "jaxb-xjc", "kie-api", "kie-internal",
-				     "logback-classic", "slf4j-api", "spring-beans", "spring-context", "spring-core",
-				      "spring-jdbc", "spring-test", "spring-tx", "xstream"
+				     "drools-decisiontables", "drools-persistence-jpa", "drools-jsr94", "drools-verifier",
+				     "ecj", "h2", "jaxb-impl", "jaxb-xjc", "jbpm-human-task-jpa", "kie-api", "kie-internal",
+				     "logback-classic", "slf4j-api", "xstream"
 		}
 
 		runtime "com.sun.xml.bind:jaxb-xjc:$comSunXmlBindVersion", {
