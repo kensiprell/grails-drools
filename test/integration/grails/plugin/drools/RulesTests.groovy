@@ -9,7 +9,6 @@ class RulesTests extends IntegrationSpec {
 
 	def droolsService
 	StatelessKieSession applicationStatelessSession
-	// TODO tests for ticketStatefulSession
 	KieSession ticketStatefulSession
 
 	void "test applicationStatelessSession bean"() {
@@ -118,6 +117,29 @@ class RulesTests extends IntegrationSpec {
 		droolsService.executeFromDatabase("application", [applicant, application])
 		then:
 		!application.valid
+	}
+
+	void "test ticketStatefulSession bean"() {
+		given:
+		def t1 = new Ticket(1, new Customer("Jack", "Gold"))
+		def t2 = new Ticket(2, new Customer("Tom", "Silver"))
+		def t3 = new Ticket(3, new Customer("Bill", "Bronze"))
+		def facts = [t1, t1.customer, t2, t2.customer, t3, t3.customer]
+
+		when:
+		for (fact in facts) {
+			ticketStatefulSession.insert fact
+		}
+		ticketStatefulSession.fireAllRules()
+		ticketStatefulSession.dispose()
+
+		then:
+		"Escalate" == t1.status
+		5 == t1.customer.discount
+		"Escalate" == t2.status
+		0 == t2.customer.discount
+		"Pending" == t3.status
+		0 == t3.customer.discount
 	}
 
 	void "test fireFromFile"() {
