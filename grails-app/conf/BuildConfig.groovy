@@ -17,13 +17,13 @@ grails.project.dependency.resolution = {
 	}
 
 	dependencies {
-		String droolsVersion = "6.1.0.Final" //"6.1.0.Final" "6.2.0.CR4"
 		String comSunXmlBindVersion = "2.2.11"
+		String droolsVersion = "6.1.0.Final"
 
 		compile "org.drools:drools-compiler:$droolsVersion", {
 			excludes "activation", "antlr-runtime", "cdi-api", "drools-core", "ecj", "glazedlists_java15",
 			         "gunit", "janino", "junit", "logback-classic", "mockito-all", "mvel2",
-			         "org.osgi.compendium", "org.osgi.core", "quartz", "slf4j-api",
+			         "org.osgi.compendium", "org.osgi.core", "protobuf-java", "quartz", "slf4j-api",
 			         "stax-api", "weld-se-core", "xstream"
 		}
 		compile "org.drools:drools-core:$droolsVersion", {
@@ -41,7 +41,6 @@ grails.project.dependency.resolution = {
 		}
 		compile "org.drools:drools-verifier:$droolsVersion", {
 			excludes "drools-compiler", "guava", "itext", "junit", "kie-api", "mockito-all", "xstream"
-
 		}
 		compile "org.kie:kie-api:$droolsVersion", {
 			excludes "activation", "cdi-api", "jms", "junit", "mockito-all", "org.osgi.compendium",
@@ -50,12 +49,10 @@ grails.project.dependency.resolution = {
 		compile "org.kie:kie-internal:$droolsVersion", {
 			excludes "cdi-api", "junit", "kie-api", "mockito-all", "slf4j-api", "xstream"
 		}
-
 		compile "org.kie:kie-spring:$droolsVersion", {
-			excludes "antlr-runtime", "cdi-api", "commons-logging", "drools-compiler", "drools-core",
-				     "drools-decisiontables", "drools-persistence-jpa", "drools-jsr94", "drools-verifier",
-				     "ecj", "h2", "jaxb-impl", "jaxb-xjc", "jbpm-human-task-jpa", "kie-api", "kie-internal",
-				     "logback-classic", "slf4j-api", "xstream"
+			excludes "antlr-runtime", "cdi-api", "commons-logging", "drools-compiler", "drools-core", "drools-core",
+			         "drools-decisiontables", "ecj", "h2", "hibernate-entitymanager", "hibernate-jpa-2.0-api",
+			         "kie-api", "kie-internal", "logback-classic", "named-kiesession", "slf4j-api", "xstream"
 		}
 
 		runtime "com.sun.xml.bind:jaxb-xjc:$comSunXmlBindVersion", {
