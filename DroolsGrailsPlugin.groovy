@@ -19,7 +19,7 @@ class DroolsGrailsPlugin {
 	def description = "This plugin integrates the [Drools|https://www.drools.org] Business Rules Management System."
 	def documentation = "https://github.com/kensiprell/grails-drools/blob/master/README.md"
 	def license = "APACHE"
-	def issueManagement = [system: "github", url: "https://github.com/kensiprell/grails-drools/issues"]
+	def issueManagement = [system: "github", url: "https://github.com/burtbeckwith/grails-drools/issues"]
 	def scm = [url: "https://github.com/kensiprell/grails-drools"]
 	def artefacts = [DroolsDomainClassArtefactHandler]
 
