@@ -2,7 +2,7 @@ import grails.plugin.drools.DroolsDomainClassArtefactHandler
 
 class DroolsGrailsPlugin {
 
-	def version = "0.9.1"
+	def version = "0.9.2"
 	def grailsVersion = "2.2 > *"
 	def pluginExcludes = [
 		"grails-app/conf/drools-context.xml",
@@ -19,7 +19,7 @@ class DroolsGrailsPlugin {
 	def description = "This plugin integrates the [Drools|https://www.drools.org] Business Rules Management System."
 	def documentation = "https://github.com/kensiprell/grails-drools/blob/master/README.md"
 	def license = "APACHE"
-	def issueManagement = [system: "github", url: "https://github.com/burtbeckwith/grails-drools/issues"]
+	def issueManagement = [system: "JIRA", url: "https://jira.grails.org/browse/GPDROOLS"]
 	def scm = [url: "https://github.com/kensiprell/grails-drools"]
 	def artefacts = [DroolsDomainClassArtefactHandler]
 

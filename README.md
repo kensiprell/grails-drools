@@ -12,7 +12,7 @@ The plugin has been tested  using the [sample application](https://github.com/ke
 
 * JDK 1.7.0_75
 
-If you have a question, problem, suggestion, or want to report a bug, please submit an [issue](https://github.com/burtbeckwith/grails-drools/issues?state=open). I will reply as soon as I can.
+If you have a question, problem, suggestion, or want to report a bug, please submit an [issue](https://jira.grails.org/browse/GPDROOLS). I will reply as soon as I can.
 
 [Release Notes](https://github.com/kensiprell/grails-drools/wiki/Release-Notes)
 
@@ -53,7 +53,7 @@ Edit your `BuildConfig.groovy`:
 
     plugins {
        // other plugins
-       compile ":drools:0.9.0"
+       compile ":drools:0.9.2"
     }
 
 ### Configuration
