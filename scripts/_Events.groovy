@@ -30,8 +30,11 @@ eventCreateWarEnd = { warName, stagingDir ->
 }
 
 private void copyFiles(destination) {
+	String drlFileLocationPath = new File("$basedir/$drlFileLocation").canonicalPath
 	sourceDir.traverse(type: FILES) {
-		String newName = ("rules$it.path" - "$basedir/$drlFileLocation").replaceAll("/", ".")
+		// TODO GPDROOLS-6
+		String filePath = new File(it.path).canonicalPath
+		String newName = ("rules$filePath" - drlFileLocationPath).replaceAll("/", ".").replaceAll("\\\\", ".")
 		def newFile = new File(destination, newName)
 		newFile.parentFile.mkdirs()
 		newFile.write(it.text)

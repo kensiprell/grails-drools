@@ -2,7 +2,7 @@ import grails.plugin.drools.DroolsDomainClassArtefactHandler
 
 class DroolsGrailsPlugin {
 
-	def version = "0.9.2"
+	def version = "0.9.3-SNAPSHOT"
 	def grailsVersion = "2.2 > *"
 	def pluginExcludes = [
 		"grails-app/conf/drools-context.xml",

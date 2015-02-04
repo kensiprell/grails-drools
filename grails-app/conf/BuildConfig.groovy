@@ -23,8 +23,8 @@ grails.project.dependency.resolution = {
 		compile "org.drools:drools-compiler:$droolsVersion", {
 			excludes "activation", "antlr-runtime", "cdi-api", "drools-core", "ecj", "glazedlists_java15",
 			         "gunit", "janino", "junit", "logback-classic", "mockito-all", "mvel2",
-			         "org.osgi.compendium", "org.osgi.core", "protobuf-java", "quartz", "slf4j-api",
-			         "stax-api", "weld-se-core", "xstream"
+			         "org.osgi.compendium", "org.osgi.core", "quartz", "slf4j-api", "stax-api",
+			         "weld-se-core", "xstream"
 		}
 		compile "org.drools:drools-core:$droolsVersion", {
 			excludes "activation", "antlr", "antlr-runtime", "cdi-api", "junit", "kie-api", "kie-internal",
