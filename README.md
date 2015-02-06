@@ -53,7 +53,7 @@ Edit your `BuildConfig.groovy`:
 
     plugins {
        // other plugins
-       compile ":drools:0.9.2"
+       compile ":drools:0.9.3"
     }
 
 ### Configuration
