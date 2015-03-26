@@ -18,7 +18,7 @@ grails.project.dependency.resolution = {
 
 	dependencies {
 		String comSunXmlBindVersion = "2.2.11"
-		String droolsVersion = "6.1.0.Final"
+		String droolsVersion = "6.2.0.Final"
 
 		compile "org.drools:drools-compiler:$droolsVersion", {
 			excludes "activation", "antlr-runtime", "cdi-api", "drools-core", "ecj", "glazedlists_java15",
