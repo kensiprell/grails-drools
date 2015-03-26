@@ -31,10 +31,16 @@ eventCreateWarEnd = { warName, stagingDir ->
 
 private void copyFiles(destination) {
 	String drlFileLocationPath = new File("$basedir/$drlFileLocation").canonicalPath
-	sourceDir.traverse(type: FILES) {
+	def nameFilterRules = ~/.*\.(drl|rule)$/
+	sourceDir.traverse(type: FILES, nameFilter: nameFilterRules) {
 		String filePath = new File(it.path).canonicalPath
-		String newName = ("rules$filePath" - drlFileLocationPath).replaceAll("/", ".").replaceAll("\\\\", ".")
+		String newName = ("rules$filePath" - drlFileLocationPath)
+		// Copy to target/classes/rules/package/path/*.[drl|rule]
 		def newFile = new File(destination, newName)
+		newFile.parentFile.mkdirs()
+		newFile.write(it.text)
+		// Copy to target/classes/rules.fullName
+		newFile = new File(destination, newName.replaceAll("/", ".").replaceAll("\\\\", "."))
 		newFile.parentFile.mkdirs()
 		newFile.write(it.text)
 	}
