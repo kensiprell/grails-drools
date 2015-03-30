@@ -1,7 +1,7 @@
 grails.plugin.drools.droolsRuleDomainClass = 'grails.plugin.drools.DroolsRule'
 
 log4j = {
-	warn 'org.drools',
+	info 'org.drools',
 	     'org.kie'
 
 	error 'org.codehaus.groovy.grails',

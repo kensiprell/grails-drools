@@ -17,8 +17,13 @@ grails.project.dependency.resolution = {
 	}
 
 	dependencies {
-		String comSunXmlBindVersion = "2.2.11"
 		String droolsVersion = "6.2.0.Final"
+		String comSunXmlBindVersion = "2.2.11"
+		String janinoVersion = "2.7.5"
+		String xstreamVersion = "1.4.7"
+		String ecjVersion = "4.4"
+		String mvel2Version = "2.2.4.Final"
+		String antlrRuntimeVersion = "3.5.2"
 
 		compile "org.drools:drools-compiler:$droolsVersion", {
 			excludes "activation", "antlr-runtime", "cdi-api", "drools-core", "ecj", "glazedlists_java15",
@@ -62,23 +67,23 @@ grails.project.dependency.resolution = {
 			excludes "FastInfoset", "jaxb-core"
 		}
 
-		runtime "org.codehaus.janino:janino:2.7.5", {
+		runtime "org.codehaus.janino:janino:$janinoVersion", {
 			excludes "ant-nodeps", "junit"
 		}
 
-		runtime "com.thoughtworks.xstream:xstream:1.4.7", {
+		runtime "com.thoughtworks.xstream:xstream:$xstreamVersion", {
 			excludes "cglib-nodep", "commons-lang", "dom4j", "jdom", "jettison", "jmock", "joda-time",
 				     "json", "junit", "kxml2", "kxml2-min", "oro", "stax", "stax-api",
 				     "wstx-asl", "xml-writer", "xmlpull", "xom", "xpp3_min"
 		}
 
-		runtime "org.eclipse.jdt.core.compiler:ecj:4.4"
+		runtime "org.eclipse.jdt.core.compiler:ecj:$ecjVersion"
 
-		runtime "org.mvel:mvel2:2.2.2.Final", {
+		runtime "org.mvel:mvel2:$mvel2Version", {
 			excludes "junit", "xstream"
 		}
 
-		runtime "org.antlr:antlr-runtime:3.5.2", {
+		runtime "org.antlr:antlr-runtime:$antlrRuntimeVersion", {
 			excludes "junit", "stringtemplate"
 		}
 	}

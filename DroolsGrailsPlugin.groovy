@@ -1,14 +1,15 @@
 import grails.plugin.drools.DroolsDomainClassArtefactHandler
+import org.kie.spring.KModuleBeanFactoryPostProcessor
 
 class DroolsGrailsPlugin {
 
-	def version = "0.9.3"
+	def version = "1.0.0.-SNAPSHOT"
 	def grailsVersion = "2.2 > *"
 	def pluginExcludes = [
 		"grails-app/conf/drools-context.xml",
 		"grails-app/conf/DroolsTestConfig.groovy",
 		"grails-app/domain/**",
-		"src/rules/**"
+		"src/resources/rules/**"
 	]
 	def title = "Drools Plugin"
 	def author = "Ken Siprell"

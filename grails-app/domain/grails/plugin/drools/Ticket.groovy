@@ -1,4 +1,4 @@
-package drools
+package grails.plugin.drools
 
 class Ticket {
 	int id
