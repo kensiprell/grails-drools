@@ -2,19 +2,16 @@ import static groovy.io.FileType.FILES
 import grails.util.Environment
 import groovy.xml.MarkupBuilder
 
-import org.kie.spring.KModuleBeanFactoryPostProcessor
-
 includeTargets << new File(droolsPluginDir, "scripts/_DroolsUtils.groovy")
 
 configurationType = grailsSettings.config.grails.plugin.drools.configurationType ?: "droolsConfigGroovy"
-drlFileLocation = grailsSettings.config.grails.plugin.drools.drlFileLocation ?: "src/rules"
-sourceDir = new File(basedir, drlFileLocation)
+drlFileLocation = grailsSettings.config.grails.plugin.drools.drlFileLocation ?: "rules"
 
 eventCompileEnd = {
 	if (configurationType == "droolsConfigGroovy") {
 		writeDroolsContentXml(basedir, isPluginProject)
 	}
-	copyFiles(buildSettings.classesDir)
+	copyFiles(buildSettings.resourcesDir)
 }
 
 eventTestCompileEnd = {
@@ -29,24 +26,30 @@ eventCreateWarEnd = { warName, stagingDir ->
 	copyFiles("$stagingDir/WEB-INF/classes")
 }
 
-private void copyFiles(destination) {
-	String drlFileLocationPath = new File("$basedir/$drlFileLocation").canonicalPath
+private void copyFiles(String destination) {
+	// Copy drools-context.xml
+/*
+	def droolsContextXmlDir =  new File("$project.projectDir/src/main/resources/META-INF")
+	if (!droolsContextXmlDir.isDirectory()) {
+		droolsContextXmlDir.mkdirs()
+	}
+	def droolsContextXmlFile = new File("$droolsContextXmlDir/drools-context.xml")
+*/
+
+	// Copy *.drl and *.rule files
+	def sourceDir = new File(basedir, "src/resources/$drlFileLocation")
+	String drlFileLocationPath = new File("$basedir/src/resources/$drlFileLocation").canonicalPath
 	def nameFilterRules = ~/.*\.(drl|rule)$/
 	sourceDir.traverse(type: FILES, nameFilter: nameFilterRules) {
 		String filePath = new File(it.path).canonicalPath
-		String newName = ("rules$filePath" - drlFileLocationPath)
-		// Copy to target/classes/rules/package/path/*.[drl|rule]
+		String newName = ("$drlFileLocation$filePath" - drlFileLocationPath)
 		def newFile = new File(destination, newName)
-		newFile.parentFile.mkdirs()
-		newFile.write(it.text)
-		// Copy to target/classes/rules.fullName
-		newFile = new File(destination, newName.replaceAll("/", ".").replaceAll("\\\\", "."))
 		newFile.parentFile.mkdirs()
 		newFile.write(it.text)
 	}
 }
 
-private void writeDroolsContentXml(basedir, isPluginProject) {
+private void writeDroolsContentXml(String basedir, Boolean isPluginProject) {
 	def droolsConfigFile
 	def droolsContextXmlFile = new File(basedir, "grails-app/conf/drools-context.xml")
 	def slurper = new ConfigSlurper(Environment.current.name)
@@ -74,11 +77,11 @@ private void writeDroolsContentXml(basedir, isPluginProject) {
 	def droolsContentXml = new MarkupBuilder(writer)
 	droolsContentXml.mkp.xmlDeclaration(version: "1.0", encoding: "utf-8")
 	droolsContentXml.beans(xmlns: "http://www.springframework.org/schema/beans",
-	                      "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-	                      "xmlns:kie": "http://drools.org/schema/kie-spring",
-	                      "xsi:schemaLocation": "http://www.springframework.org/schema/beans " +
-	                                            "http://www.springframework.org/schema/beans/spring-beans-3.0.xsd " +
-	                                            "http://drools.org/schema/kie-spring http://drools.org/schema/kie-spring.xsd") {
+		"xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+		"xmlns:kie": "http://drools.org/schema/kie-spring",
+		"xsi:schemaLocation": "http://www.springframework.org/schema/beans " +
+			"http://www.springframework.org/schema/beans/spring-beans-3.0.xsd " +
+			"http://drools.org/schema/kie-spring http://drools.org/schema/kie-spring.xsd") {
 		"kie:kmodule"(id: "defaultKieModule") {
 			droolsConfig.kieBases.each { kieBase ->
 				if (!kieBase.includeInConfig) return
@@ -120,7 +123,12 @@ private void writeDroolsContentXml(basedir, isPluginProject) {
 				}
 			}
 		}
-		bean(id: "kiePostProcessor", class: KModuleBeanFactoryPostProcessor.name)
+		String configFilePath = "$basedir/src/resources/"
+		URL configFileURL = new File(configFilePath).toURI().toURL()
+		bean(id: "kiePostProcessor", class: "org.kie.spring.KModuleBeanFactoryPostProcessor") {
+			"constructor-arg"(index: 0, value: configFileURL)
+			"constructor-arg"(index: 1, value: configFilePath)
+		}
 	}
 	droolsContextXmlFile.write writer.toString()
 }
