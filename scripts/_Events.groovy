@@ -26,7 +26,7 @@ eventCreateWarEnd = { warName, stagingDir ->
 	copyFiles("$stagingDir/WEB-INF/classes")
 }
 
-private void copyFiles(String destination) {
+private void copyFiles(destination) {
 	// Copy drools-context.xml
 /*
 	def droolsContextXmlDir =  new File("$project.projectDir/src/main/resources/META-INF")
@@ -49,7 +49,7 @@ private void copyFiles(String destination) {
 	}
 }
 
-private void writeDroolsContentXml(String basedir, Boolean isPluginProject) {
+private void writeDroolsContentXml(basedir, isPluginProject) {
 	def droolsConfigFile
 	def droolsContextXmlFile = new File(basedir, "grails-app/conf/drools-context.xml")
 	def slurper = new ConfigSlurper(Environment.current.name)
