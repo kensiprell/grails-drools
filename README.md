@@ -1,20 +1,49 @@
 ## Grails plugin for integrating Drools
 
-[Drools](https://www.drools.org) is a Business Rules Management System (BRMS) solution. The plugin fully supports Drools [kie-spring](https://docs.jboss.org/drools/release/6.2.0.CR4/drools-docs/html/ch.kie.spring.html) integration.
+[Drools](https://www.drools.org) is a Business Rules Management System (BRMS) solution. The plugin fully supports Drools [kie-spring](https://docs.jboss.org/drools/release/6.2.0.Final/drools-docs/html/ch11.html) integration.
 
 The plugin has been tested  using the [sample application](https://github.com/kensiprell/grails-drools-sample) and [test script](https://github.com/kensiprell/grails-plugin-test-script/blob/master/drools.sh) in the following environment:
 
-* Drools 6.1.0.Final
+* Drools 6.2.0.Final
 
-* Grails versions 2.2.5, 2.3.9, and 2.4.4
+* Grails versions 2.2.5, 2.3.9, and 2.4.5
 
-* OSX 10.10.1
+* OSX 10.10.2
 
 * JDK 1.7.0_75
 
-If you have a question, problem, suggestion, or want to report a bug, please submit an [issue](https://jira.grails.org/browse/GPDROOLS). I will reply as soon as I can.
+If you have a question, problem, suggestion, or want to report a bug, please submit an [issue](https://github.com/kensiprell/grails-drools/issues?state=open). I will reply as soon as I can.
 
 [Release Notes](https://github.com/kensiprell/grails-drools/wiki/Release-Notes)
+
+## Breaking Changes
+If you are upgrading from version 0.9.3, there are some breaking changes you will have to address. 
+### Rule File Directory
+Rule files and subdirectories must be located under `src/resources/`. You can no longer use some arbitrary file system path. This change and the one discussed below were required to align the plugin with Drools conventions.
+
+### drlFileLocation 
+`grails.plugin.drools.drlFileLocation` must be a single directory name and not a path. For example, the default of "rules" refers to the following file system path: `src/resources/rules/`.
+
+### Classpath Access
+Rule files are now available on the classpath using `/` instead of `.`. Older versions of the plugin violated the DRY principle by having the same rule file in two different locations. For example,
+
+    droolsService.executeFromFile("rules.ruleOne.drl", [facts])
+
+becomes
+
+    droolsService.executeFromFile("rules/ruleOne.drl", [facts])
+
+And
+
+    classLoader.getResourceAsStream("rules.ruleOne.drl")
+
+becomes
+
+    classLoader.getResourceAsStream("rules/ruleOne.drl")
+
+
+### Rule File Names
+Rule files must have a "drl" or "rule" suffix. This change avoids unnecessary clutter in the `target` directory by omitting hidden files and directories for example.
 
 ## How the Plugin Works
 The plugin offers a variety of ways to use rules. The [RuleTests](https://github.com/kensiprell/grails-drools/blob/master/test/integration/grails/plugin/drools/RulesTests.groovy) and [TestController](https://github.com/kensiprell/grails-drools-sample/blob/master/grails-app/controllers/grails/plugin/drools_sample/TestController.groovy) classes show several examples.
@@ -53,7 +82,7 @@ Edit your `BuildConfig.groovy`:
 
     plugins {
        // other plugins
-       compile ":drools:0.9.3"
+       compile ":drools:1.0.0"
     }
 
 ### Configuration
@@ -66,7 +95,7 @@ After the plugin is installed you will find a heavily commented [DroolsConfig.gr
 There are two options that you can configure in your `grails-app/conf/BuildConfig.groovy`. The defaults are shown below:
 
     grails.plugin.drools.configurationType = "droolsConfigGroovy"
-    grails.plugin.drools.drlFileLocation = "src/rules"
+    grails.plugin.drools.drlFileLocation = "rules"
 
 ##### grails.plugin.drools.configurationType
 The option below will stop the plugin from overwriting `grails-app/conf/drools-context.xml`. This will allow you to edit the file manually without losing changes.
@@ -74,11 +103,11 @@ The option below will stop the plugin from overwriting `grails-app/conf/drools-c
     grails.plugin.drools.configurationType = "droolsContextXml"
 
 ##### grails.plugin.drools.drlFileLocation
-This option is the directory root for Rule files, generally those files with a "drl" or "rule" suffix. Note the lack of leading and trailing slashes below:
+This option is the directory root for Rule files, those files with a "drl" or "rule" suffix. Note the lack of leading and trailing slashes below:
 
-    grails.plugin.drools.drlFileLocation = "path/to/my/rules"
+    grails.plugin.drools.drlFileLocation = "drools-rules"
 
-You can take advantage of rule packages by creating subdirectories under `drlFileLocation`. See the plugin's [src/rules](https://github.com/kensiprell/grails-drools/tree/master/src/rules) for an example.
+You can take advantage of rule packages by creating subdirectories under `drlFileLocation`. See the plugin's [src/resources/rules](https://github.com/kensiprell/grails-drools/tree/master/src/resources/rules) for an example.
 
 All files in this directory and its subdirectories with a "drl" or "rule" suffix will be copied to the classpath.
 
@@ -88,7 +117,7 @@ If you change the domain class used to store your rules without using the script
     grails.plugin.drools.droolsRuleDomainClass = "com.example.DroolsRule"
 
 #### DroolsConfig.groovy
-See [DroolsConfig.groovy](https://github.com/kensiprell/grails-drools/blob/master/src/templates/conf/DroolsConfig.groovy) for configuration options and instructions. [Drools Spring Integration](http://docs.jboss.org/drools/release/6.1.0.Final/drools-docs/html/ch.kie.spring.html) provides more information.
+See [DroolsConfig.groovy](https://github.com/kensiprell/grails-drools/blob/master/src/templates/conf/DroolsConfig.groovy) for configuration options and instructions. [Drools Spring Integration](https://docs.jboss.org/drools/release/6.2.0.Final/drools-docs/html/ch11.html) provides more information.
 
 ## Using the Plugin
 
@@ -98,19 +127,19 @@ Changes to rule files will not be available until the applicaiton is restarted.
 
 Changing the `grails.plugin.drools.drlFileLocation` option could affect the `packages` property for a `KieBase`. For example, for the option
 
-    grails.plugin.drools.drlFileLocation = "path/to/my/rulesDir"
+    grails.plugin.drools.drlFileLocation = "drools-rules"
 
 with a rule file located in a subdirectory:
 
-    ~/my-grails-app/path/to/my/rulesDir/packageOne/ruleFile1.drl
+    ~/my-grails-app/src/resources/drools-rules/packageOne/ruleFile1.drl
 
 The rule file will be avaiable on the classpath as
 
-    rules.packageOne.ruleFile1.drl
+    drools-rules/packageOne/ruleFile1.drl
 
 and the KieBase packages property would be:
 
-    packages: "rules.packageOne"
+    packages: "drools-rules.packageOne"
 
 ### Scripts
 The plugin offers three command-line scripts.
