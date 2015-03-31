@@ -14,6 +14,8 @@ eventCompileEnd = {
 	copyFiles(buildSettings.resourcesDir)
 }
 
+/*
+TODO delete
 eventTestCompileEnd = {
 	def integrationPath = "${grailsSettings.testClassesDir}/integration"
 	def integrationDir = new File(integrationPath)
@@ -21,6 +23,7 @@ eventTestCompileEnd = {
 		copyFiles(integrationPath)
 	}
 }
+*/
 
 eventCreateWarEnd = { warName, stagingDir ->
 	copyFiles("$stagingDir/WEB-INF/classes")
@@ -122,12 +125,6 @@ private void writeDroolsContentXml(basedir, isPluginProject) {
 					"kie:$listener.type"(ref: listener.ref)
 				}
 			}
-		}
-		String configFilePath = "$basedir/src/resources/"
-		URL configFileURL = new File(configFilePath).toURI().toURL()
-		bean(id: "kiePostProcessor", class: "org.kie.spring.KModuleBeanFactoryPostProcessor") {
-			"constructor-arg"(index: 0, value: configFileURL)
-			"constructor-arg"(index: 1, value: configFilePath)
 		}
 	}
 	droolsContextXmlFile.write writer.toString()

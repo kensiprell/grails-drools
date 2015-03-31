@@ -3,7 +3,7 @@ import org.kie.spring.KModuleBeanFactoryPostProcessor
 
 class DroolsGrailsPlugin {
 
-	def version = "1.0.0.-SNAPSHOT"
+	def version = "1.0.0-SNAPSHOT"
 	def grailsVersion = "2.2 > *"
 	def pluginExcludes = [
 		"grails-app/conf/drools-context.xml",
@@ -20,7 +20,7 @@ class DroolsGrailsPlugin {
 	def description = "This plugin integrates the [Drools|https://www.drools.org] Business Rules Management System."
 	def documentation = "https://github.com/kensiprell/grails-drools/blob/master/README.md"
 	def license = "APACHE"
-	def issueManagement = [system: "JIRA", url: "https://jira.grails.org/browse/GPDROOLS"]
+	def issueManagement = [system: "github", url: "https://github.com/kensiprell/grails-drools/issues"]
 	def scm = [url: "https://github.com/kensiprell/grails-drools"]
 	def artefacts = [DroolsDomainClassArtefactHandler]
 
@@ -31,5 +31,10 @@ class DroolsGrailsPlugin {
 			log.debug(e)
 			log.error "grails-app/conf/drools-context.xml does not exist. Try 'grails create-drools-config' or 'grails create-drools-context'."
 		}
+
+		String userDir = System.getProperty("user.dir")
+		String configFilePath = "$userDir/src/resources"
+		URL configFileURL = new File(configFilePath).toURI().toURL()
+		kiePostProcessor(KModuleBeanFactoryPostProcessor, configFileURL, configFilePath) {}
 	}
 }
