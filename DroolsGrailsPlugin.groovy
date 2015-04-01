@@ -4,7 +4,7 @@ import org.kie.spring.KModuleBeanFactoryPostProcessor
 class DroolsGrailsPlugin {
 
 	def version = "1.0.0-SNAPSHOT"
-	def grailsVersion = "2.2 > *"
+	def grailsVersion = "2.3 > *"
 	def pluginExcludes = [
 		"grails-app/conf/drools-context.xml",
 		"grails-app/conf/DroolsTestConfig.groovy",
