@@ -14,31 +14,12 @@ eventCompileEnd = {
 	copyFiles(buildSettings.resourcesDir)
 }
 
-/*
-TODO delete
-eventTestCompileEnd = {
-	def integrationPath = "${grailsSettings.testClassesDir}/integration"
-	def integrationDir = new File(integrationPath)
-	if (integrationDir.exists()) {
-		copyFiles(integrationPath)
-	}
-}
-*/
-
-eventCreateWarEnd = { warName, stagingDir ->
+eventCreateWarStart = { warName, stagingDir ->
+	println "Copying rules files to $stagingDir/WEB-INF/classes"
 	copyFiles("$stagingDir/WEB-INF/classes")
 }
 
 private void copyFiles(destination) {
-	// Copy drools-context.xml
-/*
-	def droolsContextXmlDir =  new File("$project.projectDir/src/main/resources/META-INF")
-	if (!droolsContextXmlDir.isDirectory()) {
-		droolsContextXmlDir.mkdirs()
-	}
-	def droolsContextXmlFile = new File("$droolsContextXmlDir/drools-context.xml")
-*/
-
 	// Copy *.drl and *.rule files
 	def sourceDir = new File(basedir, "src/resources/$drlFileLocation")
 	String drlFileLocationPath = new File("$basedir/src/resources/$drlFileLocation").canonicalPath
@@ -53,6 +34,7 @@ private void copyFiles(destination) {
 }
 
 private void writeDroolsContentXml(basedir, isPluginProject) {
+	// Create grails-app/conf/drools-context.xml
 	def droolsConfigFile
 	def droolsContextXmlFile = new File(basedir, "grails-app/conf/drools-context.xml")
 	def slurper = new ConfigSlurper(Environment.current.name)
