@@ -6,14 +6,14 @@ if (!droolsConfigFile.exists()) {
 }
 
 println """
-*******************************************************
-* You have installed the drools plugin.               *
-*                                                     *
-* Documentation:                                      *
-* https://github.com/kensiprell/grails-drools         *
-*                                                     *
-* Next step:                                          *
-* grails create-drools-domain com.example.DroolsRule  *
-*                                                     *
-*******************************************************
+****************************************************************
+*                           WARNING!                           *
+*                                                              *
+*                Drools Plugin Breaking Changes                *
+*                                                              *
+* See the link below for details:                              *
+* https://github.com/kensiprell/grails-drools#breaking-changes *
+*                                                              *
+*                           WARNING!                           *
+****************************************************************
 """
