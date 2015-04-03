@@ -15,7 +15,6 @@ eventCompileEnd = {
 }
 
 eventCreateWarStart = { warName, stagingDir ->
-	println "Copying rules files to $stagingDir/WEB-INF/classes"
 	copyFiles("$stagingDir/WEB-INF/classes")
 }
 
