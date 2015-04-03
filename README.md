@@ -14,7 +14,7 @@ The plugin has been tested  using the [sample application](https://github.com/ke
 
 If you want to use the plugin with a version of Grails earlier than 2.3.0, see [Grails 2.2.5 and Earlier](https://github.com/kensiprell/grails-drools/wiki/Grails-2.2.5-and-Earlier).
 
-If you have a question, problem, suggestion, or want to report a bug, please submit an [issue](https://github.com/kensiprell/grails-drools/issues?state=open). I will reply as soon as I can.
+If you have a question, problem, suggestion, or want to report a bug, please submit an [issue](https://github.com/kensiprell/grails-drools/issues). I will reply as soon as I can.
 
 [Release Notes](https://github.com/kensiprell/grails-drools/wiki/Release-Notes)
 
@@ -45,7 +45,7 @@ becomes
 
 
 ### Rule File Names
-Rule files must have a "drl" or "rule" suffix. This change avoids unnecessary clutter in the `target` directory by omitting hidden files and directories for example.
+Rule files must have a "drl" or "rule" suffix. This change avoids unnecessary clutter in the `target` directory by omitting hidden files and directories.
 
 ## How the Plugin Works
 The plugin offers a variety of ways to use rules. The [RuleTests](https://github.com/kensiprell/grails-drools/blob/master/test/integration/grails/plugin/drools/RulesTests.groovy) and [TestController](https://github.com/kensiprell/grails-drools-sample/blob/master/grails-app/controllers/grails/plugin/drools_sample/TestController.groovy) classes show several examples.
