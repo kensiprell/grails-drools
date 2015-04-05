@@ -1,15 +1,28 @@
 import grails.util.Environment
 import groovy.xml.MarkupBuilder
+import org.codehaus.groovy.grails.plugins.GrailsPluginUtils
+
+private String getAppDir() {
+	System.getProperty("user.dir")
+}
+
+private String getPluginDir() {
+	GrailsPluginUtils.getPluginDirForName("drools")
+}
+
+private listenerTypeCheck(type) {
+	["agendaEventListener", "processEventListener", "ruleRuntimeEventListener"].contains(type)
+}
 
 target(copyDroolsConfig: "Copies default DroolsConfig.groovy to grails-app/conf") {
-	ant.copy(file: "${droolsPluginDir}/src/templates/conf/DroolsConfig.groovy", todir: "${basedir}/grails-app/conf")
+	ant.copy(file: "${pluginDir}/src/templates/conf/DroolsConfig.groovy", todir: "${appDir}/grails-app/conf")
 }
 
 target(writeDroolsContentXml: "Create grails-app/conf/drools-context.xml") {
 	def droolsConfigFile
-	def droolsContextXmlFile = new File(basedir, "grails-app/conf/drools-context.xml")
+	def droolsContextXmlFile = new File(appDir, "grails-app/conf/drools-context.xml")
 	def slurper = new ConfigSlurper(Environment.current.name)
-	droolsConfigFile = new File(basedir, "grails-app/conf/DroolsConfig.groovy")
+	droolsConfigFile = new File(appDir, "grails-app/conf/DroolsConfig.groovy")
 	if (!droolsConfigFile.exists()) {
 		copyDroolsConfig()
 	}
@@ -72,8 +85,4 @@ target(writeDroolsContentXml: "Create grails-app/conf/drools-context.xml") {
 		}
 	}
 	droolsContextXmlFile.write writer.toString()
-}
-
-private listenerTypeCheck(type) {
-	["agendaEventListener", "processEventListener", "ruleRuntimeEventListener"].contains(type)
 }
