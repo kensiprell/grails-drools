@@ -20,7 +20,7 @@ class DroolsGrailsPlugin {
 	def artefacts = [DroolsDomainClassArtefactHandler]
 	def pluginExcludes = [
 		"grails-app/conf/drools-context.xml",
-		"grails-app/conf/DroolsTestConfig.groovy",
+		"grails-app/conf/DroolsConfig.groovy",
 		"grails-app/domain/**",
 		"src/resources/rules/**"
 	]
