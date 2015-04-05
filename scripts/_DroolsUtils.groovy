@@ -7,10 +7,9 @@ target(copyDroolsConfig: "Copies default DroolsConfig.groovy to grails-app/conf"
 
 target(writeDroolsContentXml: "Create grails-app/conf/drools-context.xml") {
 	def droolsConfigFile
-	String userDir = System.getProperty("user.dir")
-	def droolsContextXmlFile = new File(userDir, "grails-app/conf/drools-context.xml")
+	def droolsContextXmlFile = new File(basedir, "grails-app/conf/drools-context.xml")
 	def slurper = new ConfigSlurper(Environment.current.name)
-	droolsConfigFile = new File(userDir, "grails-app/conf/DroolsConfig.groovy")
+	droolsConfigFile = new File(basedir, "grails-app/conf/DroolsConfig.groovy")
 	if (!droolsConfigFile.exists()) {
 		copyDroolsConfig()
 	}
