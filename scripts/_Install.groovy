@@ -11,7 +11,7 @@ println """
 *                                                              *
 *                Drools Plugin Breaking Changes                *
 *                                                              *
-* If you are upgrading, please visit the url below:            *
+* If you are upgrading from 0.9.x, please visit the url below: *
 * https://github.com/kensiprell/grails-drools#breaking-changes *
 *                                                              *
 *                           WARNING!                           *
