@@ -1,5 +1,6 @@
 package grails.plugin.drools
 
+import grails.util.Environment
 import org.kie.api.KieBase
 import org.kie.api.KieServices
 import org.kie.api.builder.KieBuilder
@@ -145,11 +146,15 @@ class DroolsService {
 	protected KieBase buildKieBase(Resource resource) {
 		KieServices kieServices = KieServices.Factory.get()
 		KieFileSystem kfs = kieServices.newKieFileSystem()
-		kfs.write("src/main/resources/rule.drl", resource)
+		if (Environment.current == Environment.TEST) {
+			kfs.write("src/main/resources/rule.drl", resource)
+		} else {
+			kfs.write("resources/rules/rule.drl", resource)
+		}
 		KieBuilder kieBuilder = kieServices.newKieBuilder(kfs).buildAll()
 		Results results = kieBuilder.results
 		if (results.hasMessages(Message.Level.ERROR)) {
-			throw new IllegalStateException(results.messages.toString())
+			throw new IllegalStateException(this.class.name + ": " + results.messages.toString())
 		}
 		KieContainer kieContainer = kieServices.newKieContainer(kieServices.repository.defaultReleaseId)
 		kieContainer.kieBase

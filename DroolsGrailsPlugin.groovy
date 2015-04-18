@@ -3,7 +3,7 @@ import org.kie.spring.KModuleBeanFactoryPostProcessor
 
 class DroolsGrailsPlugin {
 
-	def version = "1.0.0"
+	def version = "1.0.1-SNAPSHOT"
 	def grailsVersion = "2.3 > *"
 	def pluginExcludes = [
 		"grails-app/conf/drools-context.xml",
@@ -32,9 +32,14 @@ class DroolsGrailsPlugin {
 			log.error "grails-app/conf/drools-context.xml does not exist. Try 'grails create-drools-config' or 'grails create-drools-context'."
 		}
 
-		String userDir = System.getProperty("user.dir")
-		String configFilePath = "$userDir/src/resources"
-		URL configFileURL = new File(configFilePath).toURI().toURL()
-		kiePostProcessor(KModuleBeanFactoryPostProcessor, configFileURL, configFilePath) {}
+		File webInfClasses = application.parentContext?.getResource('WEB-INF/classes')?.file
+		if (webInfClasses.exists()) {
+			kiePostProcessor(KModuleBeanFactoryPostProcessor) {}
+		} else {
+			String userDir = System.getProperty("user.dir")
+			String configFilePath = "$userDir/src/resources"
+			URL configFileURL = new File(configFilePath).toURI().toURL()
+			kiePostProcessor(KModuleBeanFactoryPostProcessor, configFileURL, configFilePath) {}
+		}
 	}
 }
