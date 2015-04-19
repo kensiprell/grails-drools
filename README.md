@@ -84,7 +84,7 @@ Edit your `BuildConfig.groovy`:
 
     plugins {
        // other plugins
-       compile ":drools:1.0.0"
+       compile ":drools:1.0.1"
     }
 
 ### Configuration
