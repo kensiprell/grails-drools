@@ -8,7 +8,7 @@ The plugin has been tested  using the [sample application](https://github.com/ke
 
 * Grails versions 2.3.11 and 2.4.5
 
-* OSX 10.10.2
+* OSX 10.10.3
 
 * JDK 1.7.0_75
 
