@@ -6,7 +6,7 @@ The plugin has been tested  using the [sample application](https://github.com/ke
 
 * Drools 6.2.0.Final
 
-* Grails versions 2.3.9 and 2.4.5
+* Grails versions 2.3.11 and 2.4.5
 
 * OSX 10.10.2
 
