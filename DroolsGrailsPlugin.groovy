@@ -39,10 +39,15 @@ class DroolsGrailsPlugin {
 			log.error "grails-app/conf/drools-context.xml does not exist. Try 'grails create-drools-config' or 'grails create-drools-context'."
 		}
 
-		String userDir = System.getProperty("user.dir")
-		String configFilePath = "$userDir/src/resources"
-		URL configFileURL = new File(configFilePath).toURI().toURL()
-		kiePostProcessor(KModuleBeanFactoryPostProcessor, configFileURL, configFilePath) {}
+		File webInfClasses = application.parentContext?.getResource('WEB-INF/classes')?.file
+		if (webInfClasses.exists()) {
+			kiePostProcessor(KModuleBeanFactoryPostProcessor) {}
+		} else {
+			String userDir = System.getProperty("user.dir")
+			String configFilePath = "$userDir/src/resources"
+			URL configFileURL = new File(configFilePath).toURI().toURL()
+			kiePostProcessor(KModuleBeanFactoryPostProcessor, configFileURL, configFilePath) {}
+		}
 	}
 
 	def onChange = { event ->
