@@ -1,8 +1,11 @@
-includeTargets << new File(droolsPluginDir, "scripts/_DroolsUtils.groovy")
+import org.codehaus.groovy.grails.plugins.GrailsPluginUtils
 
 def droolsConfigFile = new File(basedir, "grails-app/conf/DroolsConfig.groovy")
+def pluginDir = GrailsPluginUtils.getPluginDirForName("drools")
+
 if (!droolsConfigFile.exists()) {
-	copyDroolsConfig()
+	def shell = new GroovyShell()
+	shell.run(new File("$pluginDir/scripts/_CreateDroolsConfig.groovy"))
 }
 
 println """

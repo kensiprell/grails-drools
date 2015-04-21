@@ -1,6 +1,8 @@
 import grails.plugin.drools.DroolsDomainClassArtefactHandler
 import grails.spring.BeanBuilder
+import org.codehaus.groovy.grails.plugins.GrailsPluginUtils
 import org.kie.spring.KModuleBeanFactoryPostProcessor
+import org.springframework.core.io.FileSystemResource
 
 class DroolsGrailsPlugin {
 
@@ -40,7 +42,7 @@ class DroolsGrailsPlugin {
 		}
 
 		File webInfClasses = application.parentContext?.getResource('WEB-INF/classes')?.file
-		if (webInfClasses.exists()) {
+		if (webInfClasses?.exists()) {
 			kiePostProcessor(KModuleBeanFactoryPostProcessor) {}
 		} else {
 			String userDir = System.getProperty("user.dir")
@@ -51,21 +53,47 @@ class DroolsGrailsPlugin {
 	}
 
 	def onChange = { event ->
-		def beanBuilder = new BeanBuilder()
-		String filename = event.source.filename
-		File file = event.source.file
+		String appDir = System.getProperty("user.dir")
+		String pluginDir = GrailsPluginUtils.getPluginDirForName("drools").file.toString()
+		String filename = ""
+		if (event.source instanceof FileSystemResource) {
+			filename = event.source.filename
+		}
 
 		if (filename == "drools-context.xml") {
-			// TODO not needed?
-		} else if (filename == "DroolsConfig.groovy") {
-			// TODO call Gant script?
-		} else {
-			String userDir = System.getProperty("user.dir")
-			String shortPath = ("${file.toString()}" - "$userDir/src/resources")
-			def resourceFile = new File("$userDir/target/work/resources/$shortPath")
-			resourceFile << file.text
-			println "TEST: $resourceFile.text"
+			// TODO event.source: file [/Users/Ken/Development/Plugins/grails-drools-sample/grails-app/conf/drools-context.xml]
+			importBeans(true, appDir)
 		}
+		if (event.source instanceof Class) {
+			// TODO event.source: class DroolsConfig
+			def shell = new GroovyShell()
+			shell.run(new File("$pluginDir/scripts/_WriteDroolsContextXml.groovy"))
+			importBeans(true, appDir)
+		}
+		if (filename.endsWith("drl") || filename.endsWith("rule")) {
+			// TODO event.source: file [/Users/Ken/Development/Plugins/grails-drools-sample/src/resources/drools-rules/ticket/ticket.drl]
+			File file = event.source.file
+			String shortPath = ("${file.toString()}" - "$appDir/src/resources")
+			def resourceFile = new File("$appDir/target/work/resources/$shortPath")
+			resourceFile.write(file.text)
+			printLastModified("$appDir/target/work/resources/$shortPath")
+			importBeans(false, appDir)
+		}
+	}
+
+	protected static importBeans(Boolean copyDroolsContext, String appDir) {
+		def beanBuilder = new BeanBuilder()
+		if (copyDroolsContext) {
+			def droolsContextXml = new File("$appDir/grails-app/conf/drools-context.xml")
+			def droolsContextXmlTarget = new File("$appDir/target/work/resources/drools-context.xml")
+			droolsContextXmlTarget.write(droolsContextXml.text)
+		}
+		printLastModified("$appDir/target/work/resources/drools-context.xml")
 		beanBuilder.importBeans("drools-context.xml")
+	}
+
+	protected static printLastModified(String filePath) {
+		def file = new File(filePath)
+		println "TEST $file.name: " + new Date(file.lastModified()).format('hh:mm:ss dd MMM yyyy')
 	}
 }
