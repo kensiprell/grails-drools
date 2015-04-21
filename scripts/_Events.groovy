@@ -1,13 +1,18 @@
+import grails.util.Environment
 import static groovy.io.FileType.FILES
-
-includeTargets << new File(droolsPluginDir, "scripts/_DroolsUtils.groovy")
 
 configurationType = grailsSettings.config.grails.plugin.drools.configurationType ?: "droolsConfigGroovy"
 drlFileLocation = grailsSettings.config.grails.plugin.drools.drlFileLocation ?: "rules"
 
 eventCompileEnd = {
 	if (configurationType == "droolsConfigGroovy") {
-		writeDroolsContentXml()
+		def shell
+		if (Environment.current == Environment.TEST) {
+			shell = new GroovyShell(new GroovyClassLoader())
+		} else {
+			shell = new GroovyShell()
+		}
+		shell.run(new File("$droolsPluginDir/scripts/_WriteDroolsContextXml.groovy"))
 	}
 	copyFiles(buildSettings.resourcesDir)
 }
@@ -29,4 +34,3 @@ private void copyFiles(destination) {
 		newFile.write(it.text)
 	}
 }
-
