@@ -125,7 +125,7 @@ See [DroolsConfig.groovy](https://github.com/kensiprell/grails-drools/blob/maste
 
 ### Drools Rule Files
 
-Changes to rule files will not be available until the applicaiton is restarted.
+Changes to rule files will not be available until the application is restarted.
 
 Changing the `grails.plugin.drools.drlFileLocation` option could affect the `packages` property for a `KieBase`. For example, for the option
 
@@ -135,7 +135,7 @@ with a rule file located in a subdirectory:
 
     ~/my-grails-app/src/resources/drools-rules/packageOne/ruleFile1.drl
 
-The rule file will be avaiable on the classpath as
+The rule file will be available on the classpath as
 
     drools-rules/packageOne/ruleFile1.drl
 
