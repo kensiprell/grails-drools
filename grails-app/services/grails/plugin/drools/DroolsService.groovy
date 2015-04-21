@@ -63,6 +63,20 @@ class DroolsService {
 	}
 
 	/**
+	 * Execute rules from a String using a stateless session
+	 * @param text the String to use as a rule
+	 * @param facts objects to be inserted in the session
+	 */
+	def executeFromText(String text, List facts) {
+		if (!text) {
+			return
+		}
+
+		Resource resource = KieServices.Factory.get().resources.newByteArrayResource(text.bytes)
+		execute(resource, facts)
+	}
+
+	/**
 	 * Fire rules retrieved from a single database record using a stateful session
 	 * @param id the database rule to use
 	 * @param facts objects to be inserted in the session
@@ -99,6 +113,20 @@ class DroolsService {
 	 */
 	def fireFromFile(String file, List facts) {
 		Resource resource = KieServices.Factory.get().resources.newClassPathResource(file)
+		fire(resource, facts)
+	}
+
+	/**
+	 * Fire rules from a String using a stateful session
+	 * @param text the String to use as a rule
+	 * @param facts objects to be inserted in the session
+	 */
+	def fireFromText(String text, List facts) {
+		if (!text) {
+			return
+		}
+
+		Resource resource = KieServices.Factory.get().resources.newByteArrayResource(text.bytes)
 		fire(resource, facts)
 	}
 
