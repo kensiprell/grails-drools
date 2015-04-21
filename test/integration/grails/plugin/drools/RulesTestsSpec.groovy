@@ -1,7 +1,6 @@
 package grails.plugin.drools
 
 import grails.test.spock.IntegrationSpec
-
 import org.kie.api.runtime.KieSession
 import org.kie.api.runtime.StatelessKieSession
 
@@ -119,6 +118,33 @@ class RulesTestsSpec extends IntegrationSpec {
 		!application.valid
 	}
 
+	void "test executeFromText"() {
+		given:
+		def classLoader = new GroovyClassLoader()
+		String text = classLoader.getResourceAsStream("rules/application/application.drl").text
+	
+		when: "age is over 18 and application is made this year"
+		def applicant = new Applicant(name: "A Smith", age: 20)
+		def application = new Application(dateApplied: new Date())
+		droolsService.executeFromText(text, [applicant, application])
+		then:
+		application.valid
+
+		when: "age is 17 and application is made this year"
+		applicant = new Applicant(name: "B Smith", age: 17)
+		application = new Application(dateApplied: new Date())
+		droolsService.executeFromText(text, [applicant, application])
+		then:
+		!application.valid
+
+		when: "age is over 18 and application is made last year"
+		applicant = new Applicant(name: "C Smith", age: 20)
+		application = new Application(dateApplied: new Date(114, 0, 1))
+		droolsService.executeFromText(text, [applicant, application])
+		then:
+		!application.valid
+	}
+
 	void "test ticketStatefulSession bean"() {
 		given:
 		def t1 = new Ticket(1, new Customer("Greg", "Gold"))
@@ -196,6 +222,26 @@ class RulesTestsSpec extends IntegrationSpec {
 		new DroolsRule(rule: drlText, description: "application.drl", packageName: "ticket").save(flush: true)
 		DroolsRule.withSession { it.clear() }
 		droolsService.fireFromDatabase("ticket", [t1, t1.customer, t2, t2.customer, t3, t3.customer])
+
+		then:
+		t1.status == "Escalate"
+		t1.customer.discount == 5
+		t2.status == "Escalate"
+		t2.customer.discount == 0
+		t3.status == "Pending"
+		t3.customer.discount == 0
+	}
+
+	void "test fireFromText"() {
+		given:
+		def classLoader = new GroovyClassLoader()
+		def t1 = new Ticket(1, new Customer("Greg", "Gold"))
+		def t2 = new Ticket(2, new Customer("Sam", "Silver"))
+		def t3 = new Ticket(3, new Customer("Bill", "Bronze"))
+
+		when:
+		String text = classLoader.getResourceAsStream("rules/ticket/ticket.drl").text
+		droolsService.fireFromText(text, [t1, t1.customer, t2, t2.customer, t3, t3.customer])
 
 		then:
 		t1.status == "Escalate"
