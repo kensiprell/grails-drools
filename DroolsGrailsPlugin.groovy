@@ -33,7 +33,7 @@ class DroolsGrailsPlugin {
 		}
 
 		File webInfClasses = application.parentContext?.getResource('WEB-INF/classes')?.file
-		if (webInfClasses.exists()) {
+		if (webInfClasses?.exists()) {
 			kiePostProcessor(KModuleBeanFactoryPostProcessor) {}
 		} else {
 			String userDir = System.getProperty("user.dir")
