@@ -1,6 +1,6 @@
 ## Grails plugin for integrating Drools
 
-[Drools](https://www.drools.org) is a Business Rules Management System (BRMS) solution. The plugin fully supports Drools [kie-spring](https://docs.jboss.org/drools/release/6.2.0.Final/drools-docs/html/ch11.html) integration.
+[Drools](https://www.drools.org) is a Business Rules Management System (BRMS) solution. The plugin fully supports Drools [kie-spring](https://docs.jboss.org/drools/release/6.2.0.Final/drools-docs/html/ch11.html) integration. Use [Drools Usage - Google Groups](https://groups.google.com/forum/?hl=en#!forum/drools-usage) for Drools questions that are not related to the plugin. You might find [Drools Setup - Google Groups](https://groups.google.com/forum/?hl=en#!forum/drools-setup) useful although the plugin should make this unnecessary.
 
 The plugin has been tested  using the [sample application](https://github.com/kensiprell/grails-drools-sample) and [test script](https://github.com/kensiprell/grails-plugin-test-script/blob/master/drools.sh) in the following environment:
 
@@ -46,6 +46,23 @@ becomes
 
 ### Rule File Names
 Rule files must have a "drl" or "rule" suffix. This change avoids unnecessary clutter in the `target` directory by omitting hidden files and directories.
+
+## Drools Components
+The plugin uses the following Drools components.
+
+`org.kie.api.KieBase`: [API](http://docs.jboss.org/drools/release/6.2.0.Final/kie-api-javadoc/org/kie/api/KieBase.html), [Source Interface](https://github.com/droolsjbpm/droolsjbpm-knowledge/blob/master/kie-api/src/main/java/org/kie/api/KieBase.java)
+
+`org.kie.api.KieServices`: [API](http://docs.jboss.org/drools/release/6.2.0.Final/kie-api-javadoc/org/kie/api/KieServices.html), [Source Interface](https://github.com/droolsjbpm/droolsjbpm-knowledge/blob/master/kie-api/src/main/java/org/kie/api/KieServices.java), [Source Implementation](https://github.com/droolsjbpm/drools/blob/master/drools-compiler/src/main/java/org/drools/compiler/kie/builder/impl/KieServicesImpl.java)
+
+`org.kie.api.builder.KieBuilder`: [API](http://docs.jboss.org/drools/release/6.2.0.Final/kie-api-javadoc/org/kie/api/builder/KieBuilder.html), [Source Interface](https://github.com/droolsjbpm/droolsjbpm-knowledge/blob/master/kie-api/src/main/java/org/kie/api/builder/KieBuilder.java), [Source Implementation](https://github.com/droolsjbpm/drools/blob/master/drools-compiler/src/main/java/org/drools/compiler/kie/builder/impl/KieBuilderImpl.java)
+
+`org.kie.api.builder.KieFileSystem`: [API](http://docs.jboss.org/drools/release/6.2.0.Final/kie-api-javadoc/org/kie/api/builder/KieFileSystem.html), [Source Interface](https://github.com/droolsjbpm/droolsjbpm-knowledge/blob/master/kie-api/src/main/java/org/kie/api/builder/KieFileSystem.java), [Source Implementation](https://github.com/droolsjbpm/drools/blob/master/drools-compiler/src/main/java/org/drools/compiler/kie/builder/impl/KieFileSystemImpl.java)
+
+`org.kie.api.runtime.KieSession`: [API](http://docs.jboss.org/drools/release/6.2.0.Final/kie-api-javadoc/org/kie/api/runtime/KieSession.html), [Source Interface](https://github.com/droolsjbpm/droolsjbpm-knowledge/blob/master/kie-api/src/main/java/org/kie/api/runtime/KieSession.java)
+
+`org.kie.api.runtime.StatelessKieSession`: [API](http://docs.jboss.org/drools/release/6.2.0.Final/kie-api-javadoc/org/kie/api/runtime/StatelessKieSession.html), [Source Interface](https://github.com/droolsjbpm/droolsjbpm-knowledge/blob/master/kie-api/src/main/java/org/kie/api/runtime/StatelessKieSession.java)
+
+`org.kie.spring.KModuleBeanFactoryPostProcessor`: [Source](https://github.com/droolsjbpm/droolsjbpm-integration/blob/master/kie-spring/src/main/java/org/kie/spring/KModuleBeanFactoryPostProcessor.java)
 
 ## How the Plugin Works
 The plugin offers a variety of ways to use rules. The [RuleTests](https://github.com/kensiprell/grails-drools/blob/master/test/integration/grails/plugin/drools/RulesTests.groovy) and [TestController](https://github.com/kensiprell/grails-drools-sample/blob/master/grails-app/controllers/grails/plugin/drools_sample/TestController.groovy) classes show several examples.
@@ -142,6 +159,8 @@ The rule file will be available on the classpath as
 and the KieBase packages property would be:
 
     packages: "drools-rules.packageOne"
+
+The [Rule Language Reference](https://docs.jboss.org/drools/release/6.2.0.Final/drools-docs/html/ch07.html) in the Drools documentation describes the syntax for the rules files.
 
 ### Scripts
 The plugin offers three command-line scripts.
