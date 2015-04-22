@@ -143,6 +143,8 @@ and the KieBase packages property would be:
 
     packages: "drools-rules.packageOne"
 
+The [Rule Language Reference](https://docs.jboss.org/drools/release/6.2.0.Final/drools-docs/html/ch07.html) in the Drools documentation describes the syntax for the rules files.
+
 ### Scripts
 The plugin offers three command-line scripts.
 
