@@ -46,7 +46,7 @@ class DroolsGrailsPlugin {
 			kiePostProcessor(KModuleBeanFactoryPostProcessor) {}
 		} else {
 			String userDir = System.getProperty("user.dir")
-			String configFilePath = "$userDir/src/resources"
+			String configFilePath = new File("$userDir/src/resources").canonicalPath
 			URL configFileURL = new File(configFilePath).toURI().toURL()
 			kiePostProcessor(KModuleBeanFactoryPostProcessor, configFileURL, configFilePath) {}
 		}
