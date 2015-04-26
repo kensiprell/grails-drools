@@ -1,7 +1,5 @@
 package grails.plugin.drools
 
-import grails.util.Environment
-import org.kie.api.KieBase
 import org.kie.api.KieServices
 import org.kie.api.builder.KieBuilder
 import org.kie.api.builder.KieFileSystem
@@ -44,8 +42,8 @@ class DroolsService {
 			return
 		}
 
-		Resource resource = KieServices.Factory.get().resources.newByteArrayResource(rules)
-		if (resource){
+		Resource resource = KieServices.Factory.get().resources.newByteArrayResource(rules.bytes)
+		if (resource) {
 			fire(resource, facts)
 		} else {
 			log.error("Kie Resource is null")
@@ -101,8 +99,7 @@ class DroolsService {
 		if (!rules) {
 			return
 		}
-
-		Resource resource = KieServices.Factory.get().resources.newByteArrayResource(rules)
+		Resource resource = KieServices.Factory.get().resources.newByteArrayResource(rules.bytes)
 		fire(resource, facts)
 	}
 
@@ -142,7 +139,7 @@ class DroolsService {
 
 		def rules = new StringBuilder()
 		domainClass.findAllByPackageName(packageName).each { rules << it.rule << ' ' }
-		rules.toString().bytes
+		rules.toString()
 	}
 
 	protected execute(Resource resource, List facts) {
@@ -151,8 +148,8 @@ class DroolsService {
 			return
 		}
 
-		KieBase kieBase = buildKieBase(resource)
-		StatelessKieSession kieSession = kieBase.newStatelessKieSession()
+		KieContainer kieContainer = buildKieContainer(resource)
+		StatelessKieSession kieSession = kieContainer.newStatelessKieSession()
 		kieSession.execute(facts)
 	}
 
@@ -162,8 +159,8 @@ class DroolsService {
 			return
 		}
 
-		KieBase kieBase = buildKieBase(resource)
-		KieSession kieSession = kieBase.newKieSession()
+		KieContainer kieContainer = buildKieContainer(resource)
+		KieSession kieSession = kieContainer.newKieSession()
 		for (fact in facts) {
 			kieSession.insert fact
 		}
@@ -171,21 +168,17 @@ class DroolsService {
 		kieSession.dispose()
 	}
 
-	protected KieBase buildKieBase(Resource resource) {
+	protected KieContainer buildKieContainer(Resource resource) {
 		KieServices kieServices = KieServices.Factory.get()
-		KieFileSystem kfs = kieServices.newKieFileSystem()
-		if (Environment.current == Environment.TEST) {
-			kfs.write("src/main/resources/rule.drl", resource)
-		} else {
-			kfs.write("resources/rules/rule.drl", resource)
-		}
-		KieBuilder kieBuilder = kieServices.newKieBuilder(kfs).buildAll()
+		KieFileSystem kieFileSystem = kieServices.newKieFileSystem()
+		kieFileSystem.write("src/main/resources/rule.drl", resource)
+		KieBuilder kieBuilder = kieServices.newKieBuilder(kieFileSystem).buildAll()
 		Results results = kieBuilder.results
 		if (results.hasMessages(Message.Level.ERROR)) {
 			throw new IllegalStateException(this.class.name + ": " + results.messages.toString())
 		}
 		KieContainer kieContainer = kieServices.newKieContainer(kieServices.repository.defaultReleaseId)
-		kieContainer.kieBase
+		kieContainer
 	}
 
 	protected Class getDroolsRuleDomainClass() {
