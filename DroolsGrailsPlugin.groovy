@@ -1,6 +1,4 @@
 import grails.plugin.drools.DroolsDomainClassArtefactHandler
-import grails.util.Environment
-import org.codehaus.groovy.grails.plugins.GrailsPluginUtils
 import org.kie.api.builder.KieFileSystem
 import org.kie.api.io.KieResources
 import org.kie.api.io.Resource
@@ -12,7 +10,7 @@ import org.springframework.core.io.FileSystemResource
 
 class DroolsGrailsPlugin {
 
-	def version = "1.1.0-SNAPSHOT"
+	def version = "1.1.0"
 	def grailsVersion = "2.3 > *"
 	def title = "Drools Plugin"
 	def author = "Ken Siprell"
@@ -39,79 +37,17 @@ class DroolsGrailsPlugin {
 		"file:./src/resources/**/*.rule"
 	]
 	private Logger logger = LoggerFactory.getLogger("org.grails.plugins.drools.DroolsGrailsPlugin")
-	private grailsApplication
-	private beanBuilder
 
 	def doWithSpring = {
-		this.grailsApplication = application
-		this.beanBuilder = delegate
-		buildBeans()
-	}
-
-	def onChange = { event ->
-		// TODO test thoroughly in Windows
-		if (Environment.current != Environment.DEVELOPMENT) return
-		String appDir = System.getProperty("user.dir")
-		String pluginDir = GrailsPluginUtils.getPluginDirForName("drools").file.canonicalPath
-
-		if (event.source instanceof Class) {
-			if (event.source.name == "DroolsConfig") {
-				def shell = new GroovyShell()
-				shell.run(new File("$pluginDir/scripts/_WriteDroolsContextXml.groovy"))
-				copyDroolsContext(appDir)
-			}
-		}
-		if (event.source instanceof FileSystemResource) {
-			String filename = event.source.filename
-			if (filename == "drools-context.xml") {
-				removeBeans()
-				copyDroolsContext(appDir)
-				buildBeans()
-			}
-			if (filename.endsWith("drl") || filename.endsWith("rule")) {
-				File sourceFile = event.source.file
-				String shortCanonicalPath = (sourceFile.canonicalPath - (new File("$appDir/src/resources").canonicalPath))
-				String shortPath = shortCanonicalPath.replaceAll("\\\\", "/").replace("/", "")
-				File targetFile = new File("$appDir/target/work/resources/$shortPath")
-				targetFile.write(sourceFile.text)
-				KieServices kieServices = KieServices.Factory.get()
-				KieResources kieResources = kieServices.getResources()
-				KieFileSystem kieFileSystem = kieServices.newKieFileSystem()
-				Resource resource = kieResources.newClassPathResource(shortPath)
-				String resourcePath = "src/main/resources/$shortPath"
-				kieFileSystem.write(resourcePath, resource)
-				// TODO Necessary? importBeans(false, appDir)
-				logger.info "$shortCanonicalPath copied to classpath."
-			}
-		}
-	}
-
-	protected copyDroolsContext(String appDir) {
-		def droolsContextXml = new File("$appDir/grails-app/conf/drools-context.xml")
-		def droolsContextXmlTarget = new File("$appDir/target/work/resources/drools-context.xml")
-		droolsContextXmlTarget.write(droolsContextXml.text)
-		logger.info "drools-context.xml copied to classpath."
-	}
-
-/*
-2015-Mai-02 18:47:49,905 INFO [FileSystemWatcher: files=#201 cl=java.net.URLClassLoader@5ce1b5b2] org.grails.plugins.drools.DroolsGrailsPlugin  - ? ? - drools-context.xml copied to classpath.
-2015-Mai-02 18:47:59,432 INFO [Thread-16] org.grails.plugins.drools.DroolsGrailsPlugin  - ? ? - drools-context.xml copied to classpath.
-2015-Mai-02 18:47:59,459 INFO [Thread-16] org.grails.plugins.drools.DroolsGrailsPlugin  - ? ? - drools-context.xml beans re-imported.
-2015-Mai-02 18:47:59,460 INFO [Thread-16] org.grails.plugins.drools.DroolsGrailsPlugin  - NativeMethodAccessorImpl.java ? - Configured kiePostProcessor bean with path /Users/Ken/Development/Plugins/grails-drools-sample/src/resources
-2015-Mai-02 18:48:08,908 ERROR [http-nio-8080-exec-10] org.codehaus.groovy.grails.commons.spring.OptimizedAutowireCapableBeanFactory  - SLF4JLog.java 200 - Bean couldn't be autowired using grails optimization: Error creating bean with name 'ticketStatefulSession': Cannot resolve reference to bean 'ticketKieBase' while setting bean property 'kBase'; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'ticketKieBase' is defined
-2015-Mai-02 18:48:08,908 ERROR [http-nio-8080-exec-10] org.codehaus.groovy.grails.commons.spring.OptimizedAutowireCapableBeanFactory  - SLF4JLog.java 200 - Retrying using spring autowire
-2015-Mai-02 18:48:08,909 ERROR [http-nio-8080-exec-10] org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/grails-drools-sample].[grails]  - ApplicationDispatcher.java 748 - Servlet.service()
- */
-
-	protected buildBeans() {
 		try {
-			beanBuilder.importBeans("drools-context.xml")
-			logger.info "drools-context.xml beans re-imported."
+			importBeans("drools-context.xml")
+			logger.info "drools-context.xml beans imported."
 		} catch (e) {
 			logger.debug e.toString()
 			println "DroolsGrailsPlugin: grails-app/conf/drools-context.xml does not exist. Try 'grails create-drools-config' or 'grails create-drools-context'."
 		}
-		File webInfClasses = grailsApplication.parentContext?.getResource('WEB-INF/classes')?.file
+
+		File webInfClasses = application.parentContext?.getResource('WEB-INF/classes')?.file
 		String configFilePath
 		if (webInfClasses?.exists()) {
 			configFilePath = new File(webInfClasses.path).canonicalPath
@@ -120,37 +56,34 @@ class DroolsGrailsPlugin {
 			configFilePath = new File("$userDir/src/resources").canonicalPath
 		}
 		URL configFileURL = new File(configFilePath).toURI().toURL()
-		beanBuilder.kiePostProcessor(KModuleBeanFactoryPostProcessor, configFileURL, configFilePath) {}
+		kiePostProcessor(KModuleBeanFactoryPostProcessor, configFileURL, configFilePath) {}
 		logger.info "Configured kiePostProcessor bean with path $configFilePath"
 	}
 
-	protected removeBeans() {
-		def context =  grailsApplication.mainContext
-		def factory = context.getAutowireCapableBeanFactory()
-		def beanClasses = [
-			"org.drools.core.impl.StatelessKnowledgeSessionImpl",
-			"org.drools.core.impl.KnowledgeBaseImpl",
-			"org.drools.core.impl.StatefulKnowledgeSessionImpl"
-		]
-		try {
-			factory.removeBeanDefinition("kiePostProcessor")
-			logger.info "Removed kiePostProcessor bean."
-		} catch(e) {
-			logger.debug e.toString()
-		}
+	def onChange = { event ->
+		String appDir = System.getProperty("user.dir")
 
-		context.getBeanDefinitionNames().each {
-			if (it instanceof String) {
-				try {
-					def bean = context.getBean(it)
-					if (beanClasses.contains(bean.class.name)) {
-						factory.removeBeanDefinition(it)
-						logger.info "Removed $it bean."
-					}
-				} catch (e) {
-					// Avoid "Error creating bean with name 'abstractViewResolver': Bean definition is abstract"
-					logger.debug e.toString()
+		if (event.source instanceof FileSystemResource) {
+			String filename = event.source.filename
+			if (filename == "drools-context.xml") {
+				println "DroolsGrailsPlugin: the application must be restarted for changes to drools-context.xml to take effect."
+			}
+			if (filename.endsWith("drl") || filename.endsWith("rule")) {
+				File sourceFile = event.source.file
+				String shortCanonicalPath = (sourceFile.canonicalPath - (new File("$appDir/src/resources").canonicalPath))
+				String shortPath = shortCanonicalPath.replaceAll("\\\\", "/")
+				if (shortPath.startsWith("/")) {
+					shortPath = shortPath.substring(1)
 				}
+				File targetFile = new File("$appDir/target/work/resources/$shortPath")
+				targetFile.write(sourceFile.text)
+				KieServices kieServices = KieServices.Factory.get()
+				KieResources kieResources = kieServices.getResources()
+				KieFileSystem kieFileSystem = kieServices.newKieFileSystem()
+				Resource resource = kieResources.newClassPathResource(shortPath)
+				String resourcePath = "src/main/resources/$shortPath"
+				kieFileSystem.write(resourcePath, resource)
+				logger.info "$shortCanonicalPath copied to classpath."
 			}
 		}
 	}
