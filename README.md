@@ -19,33 +19,7 @@ If you have a question, problem, suggestion, or want to report a bug, please sub
 [Release Notes](https://github.com/kensiprell/grails-drools/wiki/Release-Notes)
 
 ## Breaking Changes
-If you are upgrading from version 0.9.3, there are some breaking changes you will have to address. 
-### Rule File Directory
-Rule files and subdirectories must be located under `src/resources/`. You can no longer use some arbitrary file system path. This change and the one discussed below were required to align the plugin with Drools conventions.
-
-### drlFileLocation 
-`grails.plugin.drools.drlFileLocation` must be a single directory name and not a path. For example, the default of "rules" refers to the following file system path: `src/resources/rules/`.
-
-### Classpath Access
-Rule files are now available on the classpath using `/` instead of `.`. Older versions of the plugin violated the DRY principle by having the same rule file in two different locations. For example,
-
-    droolsService.executeFromFile("rules.ruleOne.drl", [facts])
-
-becomes
-
-    droolsService.executeFromFile("rules/ruleOne.drl", [facts])
-
-And
-
-    classLoader.getResourceAsStream("rules.ruleOne.drl")
-
-becomes
-
-    classLoader.getResourceAsStream("rules/ruleOne.drl")
-
-
-### Rule File Names
-Rule files must have a "drl" or "rule" suffix. This change avoids unnecessary clutter in the `target` directory by omitting hidden files and directories.
+If you are upgrading from version 0.9.x, there are some [breaking changes](https://github.com/kensiprell/grails-drools/wiki/Breaking-Changes) you will have to address.
 
 ## Drools Components
 The plugin uses the following Drools components.
@@ -101,7 +75,7 @@ Edit your `BuildConfig.groovy`:
 
     plugins {
        // other plugins
-       compile ":drools:1.0.1"
+       compile ":drools:1.1.0"
     }
 
 ### Configuration
@@ -142,7 +116,9 @@ See [DroolsConfig.groovy](https://github.com/kensiprell/grails-drools/blob/maste
 
 ### Drools Rule Files
 
-Changes to rule files will not be available until the application is restarted.
+Changes to rule files will be reloaded in development mode if you start the application with:
+
+    grails -reloading run-app
 
 Changing the `grails.plugin.drools.drlFileLocation` option could affect the `packages` property for a `KieBase`. For example, for the option
 
