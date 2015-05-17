@@ -9,8 +9,8 @@
 	}
 
 	static constraints = {
-		ruleText blank: false
-		packageName blank: true
+		rule blank: false
+		packageName nullable: true, blank: true
 		description blank: false
 	}
 }
