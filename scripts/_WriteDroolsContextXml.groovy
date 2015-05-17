@@ -9,7 +9,6 @@ private listenerTypeCheck(type) {
 }
 
 // Create grails-app/conf/drools-context.xml")
-// TODO change appDir
 def appDir = System.getProperty("user.dir")
 def droolsConfigFile
 def droolsContextXmlFile = new File(appDir, "grails-app/conf/drools-context.xml")
