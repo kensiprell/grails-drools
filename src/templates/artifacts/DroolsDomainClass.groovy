@@ -1,15 +1,15 @@
 @artifact.package@class @artifact.name@ {
 
-	String rule        // Do not change or delete this field.
+	String ruleText    // Do not change or delete this field.
 	String packageName // Do not change or delete this field.
 	String description
 
 	static mapping = {
-		rule type: 'text'
+		ruleText type: 'text'
 	}
 
 	static constraints = {
-		rule blank: false
+		ruleText blank: false
 		packageName blank: true
 		description blank: false
 	}

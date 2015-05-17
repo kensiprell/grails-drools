@@ -1,5 +1,6 @@
 package grails.plugin.drools
 
+import org.codehaus.groovy.grails.commons.GrailsDomainClass
 import org.kie.api.KieServices
 import org.kie.api.builder.KieBuilder
 import org.kie.api.builder.KieFileSystem
@@ -128,7 +129,17 @@ class DroolsService {
 	}
 
 	protected getDatabaseRule(Long id) {
-		droolsRuleDomainClass?.get(id)?.rule
+		def domainClass = droolsRuleDomainClass
+		if (!domainClass) {
+			return
+		}
+		String ruleText
+		if (domainClass.hasPersistentProperty("rule")) {
+			ruleText = domainClass.clazz.get(id)?.rule
+		} else {
+			ruleText = domainClass.clazz.get(id)?.ruleText
+		}
+		ruleText
 	}
 
 	protected getDatabaseRules(String packageName) {
@@ -136,9 +147,12 @@ class DroolsService {
 		if (!domainClass) {
 			return
 		}
-
 		def rules = new StringBuilder()
-		domainClass.findAllByPackageName(packageName).each { rules << it.rule << ' ' }
+		if (domainClass.hasPersistentProperty("rule")) {
+			domainClass.clazz.findAllByPackageName(packageName).each { rules << it.rule << ' ' }
+		} else {
+			domainClass.clazz.findAllByPackageName(packageName).each { rules << it.ruleText << ' ' }
+		}
 		rules.toString()
 	}
 
@@ -181,12 +195,12 @@ class DroolsService {
 		kieContainer
 	}
 
-	protected Class getDroolsRuleDomainClass() {
+	protected GrailsDomainClass getDroolsRuleDomainClass() {
 		String className = grailsApplication.config.grails.plugin.drools.droolsRuleDomainClass
 		if (!className) {
 			log.error("You must set grails.plugin.drools.droolsRuleDomainClass in Config.groovy")
 			return null
 		}
-		grailsApplication.getDomainClass(className).clazz
+		grailsApplication.getDomainClass(className)
 	}
 }
