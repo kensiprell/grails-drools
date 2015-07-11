@@ -6,11 +6,11 @@ The plugin has been tested  using the [sample application](https://github.com/ke
 
 * Drools 6.2.0.Final
 
-* Grails versions 2.3.11 and 2.4.5
+* Grails versions 2.3.11, 2.4.5, and 2.5.0
 
-* OSX 10.10.3
+* OSX 10.10.4
 
-* JDK 1.7.0_75
+* JDK 1.8.0_45
 
 If you want to use the plugin with a version of Grails earlier than 2.3.0, see [Grails 2.2.5 and Earlier](https://github.com/kensiprell/grails-drools/wiki/Grails-2.2.5-and-Earlier).
 
@@ -75,7 +75,7 @@ Edit your `BuildConfig.groovy`:
 
     plugins {
        // other plugins
-       compile ":drools:1.1.0"
+       compile ":drools:1.1.1"
     }
 
 ### Configuration

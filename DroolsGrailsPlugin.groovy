@@ -10,7 +10,7 @@ import org.springframework.core.io.FileSystemResource
 
 class DroolsGrailsPlugin {
 
-	def version = "1.1.0"
+	def version = "1.1.1"
 	def grailsVersion = "2.3 > *"
 	def title = "Drools Plugin"
 	def author = "Ken Siprell"

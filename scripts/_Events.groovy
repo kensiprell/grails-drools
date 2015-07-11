@@ -6,12 +6,7 @@ drlFileLocation = grailsSettings.config.grails.plugin.drools.drlFileLocation ?: 
 
 eventCompileEnd = {
 	if (configurationType == "droolsConfigGroovy") {
-		def shell
-		if (Environment.current == Environment.TEST) {
-			shell = new GroovyShell(new GroovyClassLoader())
-		} else {
-			shell = new GroovyShell()
-		}
+		def	shell = new GroovyShell(new GroovyClassLoader())
 		shell.run(new File("$droolsPluginDir/scripts/_WriteDroolsContextXml.groovy"))
 	}
 	copyFiles(buildSettings.resourcesDir)
