@@ -1,3 +1,5 @@
+## This plugin is no longer maintained.
+
 ## Grails plugin for integrating Drools
 
 [Drools](https://www.drools.org) is a Business Rules Management System (BRMS) solution. The plugin fully supports Drools [kie-spring](https://docs.jboss.org/drools/release/6.2.0.Final/drools-docs/html/ch11.html) integration. Use [Drools Usage - Google Groups](https://groups.google.com/forum/?hl=en#!forum/drools-usage) for Drools questions that are not related to the plugin. You might find [Drools Setup - Google Groups](https://groups.google.com/forum/?hl=en#!forum/drools-setup) useful although the plugin should make this unnecessary.
